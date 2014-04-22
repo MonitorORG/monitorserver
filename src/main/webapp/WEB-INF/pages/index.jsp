@@ -23,7 +23,7 @@
     	$(document).ready(function(){
 		
 			$("#hostCommandsTable").jqGrid({
-    			url:'/MonitorServer-1.0/services/hostInfo/hostStatusInfoService/allHost/1',
+    			url:'/monitorserver/services/hostInfo/hostStatusInfoService/allHost/1',
     			datatype: "json",
     			height: 450,
     			colNames:['ID', 'Host Name','Mac Address', 'CPU Used', 'Free Mem', 'Mem Used', 'Command'], 
@@ -76,7 +76,7 @@
 	    			var hostMacAddress = $("#hostCommandsTable").getCell(row_id,"macAddress");
 	    			
 	    			jQuery("#"+subgrid_table_id).jqGrid({
-		    			url:"/MonitorServer-1.0/services/command/userCommandService/allcommand/"+hostMacAddress,
+		    			url:"/monitorserver/services/command/userCommandService/allcommand/"+hostMacAddress,
 		    			datatype: "json",
 		    			colNames:['ID', 'Mac Address', 'Command Str', 'Status', 'Result Show'], 
 						colModel:[ 
@@ -146,15 +146,16 @@
 		
 		function resultShowFormatter(cellvalue, options, rowdata) {
 			//alert(JSON.stringify(rowdata));
-			return "<span title='" + rowdata.resultStr + "'>Result</span>";
+			return "<span id='commandResultStr" + rowdata.id + "' title='" + rowdata.resultStr + "'>Result</span>";
 		}
     	
     	function refreshAllHost() {
 			var hostGrid = jQuery("#hostCommandsTable");
+			var ids = hostGrid.getDataIDs();
     		$.ajax({
 	            type: "get",
 	            dataType: "json",
-	            url: "/MonitorServer-1.0/services/hostInfo/hostStatusInfoService/allHost/1",
+	            url: "/monitorserver/services/hostInfo/hostStatusInfoService/allHost/1",
 	            complete :function() {
 	            },
 	            success: function(hostInfoArray){
@@ -164,7 +165,12 @@
 						//hostGrid.setCell(hostInfo.id, hostInfo);
 						//hostGrid.setCell(hostInfo.id, hostInfo);
 						
-						hostGrid.setRowData(hostInfo.id, hostInfo);
+						if (jQuery.inArray(hostInfo.id, ids)) {
+							hostGrid.setRowData(hostInfo.id, hostInfo);
+						} else {
+							hostGrid.addRowData(hostInfo.id, hostInfo, first);
+						}						
+						
 					});
 					
 	            }});
@@ -188,7 +194,7 @@
 			
 				$.ajax({
 					type: "POST",
-					url: "/MonitorServer-1.0/services/command/userCommandService/create",
+					url: "/monitorserver/services/command/userCommandService/create",
 					data: JSON.stringify({hostMacAddress:macAddress,commandStr:commandInputStr,status:"Created"}),
 					contentType: "application/json; charset=utf-8",
 					dataType: "json",
@@ -209,7 +215,7 @@
 			//$("#hostCommandsTable").expandSubGridRow(selRowId);
 			//var hostMacAddress = $("#hostCommandsTable").getCell(selRowId,"macAddress");
 			//$("#hostCommandsTable_" + selRowId + "_t").jqGrid("setGridParam", {
-			//	url: "/MonitorServer-1.0/services/command/userCommandService/allcommand/"+hostMacAddress, 
+			//	url: "/monitorserver/services/command/userCommandService/allcommand/"+hostMacAddress, 
 			//	datatype: "json"
 			//}).trigger("reload");
     	}
@@ -218,16 +224,25 @@
 			var selRowId = $("#hostCommandsTable").jqGrid('getGridParam', 'selrow');
 			if (selRowId) {
 				var hostMacAddress = $("#hostCommandsTable").getCell(selRowId,"macAddress");
+				var subGrid = $("#hostCommandsTable_" + selRowId + "_t");
+				var ids = subGrid.getDataIDs();
 				$.ajax({
 					type: "get",
 					dataType: "json",
-					url: "/MonitorServer-1.0/services/command/userCommandService/allcommand/" + hostMacAddress,
+					url: "/monitorserver/services/command/userCommandService/allcommand/" + hostMacAddress,
 					complete :function() {
 					},
 					success: function(commandArray){
 						
 						$.each(commandArray, function(i, command){   
-							$("#hostCommandsTable_" + selRowId + "_t").setRowData(command.id, command);
+
+							if (jQuery.inArray(command.id, ids)) {
+								subGrid.setRowData(command.id, command);
+								$("#commandResultStr"+command.id).attr("title", command.resultStr);
+							} else {
+								subGrid.addRowData(command.id, command, first);
+							}
+							
 						});
 					}});
 			}

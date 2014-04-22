@@ -8,6 +8,7 @@
             classpath:/applicationContext.xml
             classpath:/applicationContext-dao.xml
             classpath:/applicationContext-si-cxf.xml
+            classpath:/applicationContext-task.xml
             WEB-INF/cxf-servlet.xml
         </param-value>
   </context-param>

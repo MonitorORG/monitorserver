@@ -1,5 +1,6 @@
 package com.luckyryan.sample.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,10 @@ public class HostStatusInfoServiceImpl implements HostStatusInfoService {
 		HostStatusInfo host = dao.getHostByMacAddress(info.getMacAddress());
 		if (host != null && host.getId() != null) {
 			info.setId(host.getId());
+			info.setUpdateDate(new Date());
+		} else {
+			info.setCreateDate(new Date());
+			info.setUpdateDate(new Date());
 		}
 		
         return dao.save(info);

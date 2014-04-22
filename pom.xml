@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>SampleMVC</groupId>
-    <artifactId>MonitorServer</artifactId>
+    <artifactId>monitorserver</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
 
@@ -31,12 +31,12 @@
         <cache.path>target/cache</cache.path>
 
         <jdbc.username>postgres</jdbc.username>
-        <jdbc.password>111111</jdbc.password>
+        <jdbc.password>whitedove</jdbc.password>
         <jdbc.driverClassName>org.postgresql.Driver</jdbc.driverClassName>
         <jdbc.database.name>sample_monitor</jdbc.database.name>
-        <jdbc.database.server>192.168.0.116</jdbc.database.server>
+        <jdbc.database.server>192.168.1.100</jdbc.database.server>
         <jdbc.url>
-            <![CDATA[jdbc:postgresql://192.168.0.116:5432/${jdbc.database.name}?autoReconnect=true&amp;createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8]]>
+            <![CDATA[jdbc:postgresql://192.168.1.100:5432/${jdbc.database.name}?autoReconnect=true&amp;createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8]]>
         </jdbc.url>
 
     </properties>
@@ -137,7 +137,12 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
-        </dependency>
+        </dependency>        
+        <dependency>  
+            <groupId>org.springframework</groupId>  
+            <artifactId>spring-context-support</artifactId>  
+            <version>${spring.version}</version>  
+        </dependency>  
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
@@ -235,6 +240,18 @@
       		<artifactId>postgresql</artifactId>
       		<version>9.1-901.jdbc4</version>
     	</dependency>
+    	
+    	<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>1.7.3</version>
+		</dependency>
 			
     </dependencies>
 

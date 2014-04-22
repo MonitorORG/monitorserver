@@ -1,5 +1,7 @@
 package com.luckyryan.sample.dao.model;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -21,6 +23,9 @@ public class HostStatusInfo {
 	
 	private String hostname;
 	private String macAddress;
+	
+	private Date createDate;
+	private Date updateDate;
 	
 	@OneToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name="hostId")
@@ -80,5 +85,18 @@ public class HostStatusInfo {
 	}
 	public void setMacAddress(String macAddress) {
 		this.macAddress = macAddress;
+	}
+	public Date getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}	
+	
 }
