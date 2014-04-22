@@ -1,0 +1,31 @@
+-properties.properties
+http://staging.marketboomer.cn:18080/monitorserver/main/index
+
+-db.properties
+jdbc.url=jdbc:postgresql://192.168.11.22:5432/sample_monitor?autoReconnect=true&amp;createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8
+
+jdbc.username=postgres
+
+jdbc.password=whitedove
+
+-constantsutil.properties
+agent.download.path=E:/monitorserverworkspace/agent/Agent.zip
+agent.download.filename=Agent.zip
+
+Release Server steps:
+
+1. Package war file
+2. Change /MonitorServer-1.0.war/WEB-INF/classes/db.properties
+3. Change /MonitorServer-1.0.war/WEB-INF/classes/constantsutil.properties
+4. Change /MonitorServer-1.0.war/WEB-INF/pages/index.jsp
+	- replace "/MonitorServer-1.0" "/monitorserver"	
+5. change the war file name to monitorserver
+
+
+Release Agent steps:
+
+1. Package Agent, and copy Agent.jar to /Agent
+2. Replace /Agent/Agent.jar/META-INF/MANIFEST.MF by MANIFEST.MF
+3. Changed /Agent/properties.properties
+4. Zip /Agent file to Agent.zip
+5. Copy Agent.zip file to /downloadagent/Agent.zip

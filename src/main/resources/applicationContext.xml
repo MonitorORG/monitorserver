@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+    <!-- Scan for spring annotated components -->
+    <context:component-scan base-package="com.luckyryan.sample"/>
+
+    <!-- Process annotations on registered beans like @Autowired... -->
+    <context:annotation-config/>
+    
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+ 		<property name="locations">  
+           <list>  
+              <value>classpath:constantsutil.properties</value>
+              <value>classpath:db.properties</value>  
+            </list>  
+        </property>  
+	</bean>
+	
+	<bean id="constantsUtil" class="com.socket.server.util.ConstantsUtil">
+ 		<property name="agentDownloadPath" value="${agent.download.path}"></property>
+ 		<property name="agentDownloadFilename" value="${agent.download.filename}"></property>
+ 		
+	</bean>
+
+</beans>

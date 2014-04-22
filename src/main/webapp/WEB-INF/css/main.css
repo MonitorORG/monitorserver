@@ -1,0 +1,34 @@
+.window{ 
+	width:400px; 
+	background-color:#d0def0; 
+	position:absolute; 
+	padding:2px; 
+	margin:5px; 
+	display:none; 
+} 
+
+.content{ 
+	height:80px; 
+	background-color:#FFF; 
+	font-size:14px; 
+	overflow:auto; 
+} 
+
+.content table {
+	margin-top:10px;
+}
+
+.content table tr {
+	line-height:25px;
+}
+			
+.title{ 
+	padding:2px; 
+	color:#0CF; 
+	font-weight:bold;
+	font-size:14px; 
+}
+ 
+.title img{ 
+	float:right; 
+} 

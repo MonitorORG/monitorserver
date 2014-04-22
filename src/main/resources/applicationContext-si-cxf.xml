@@ -1,0 +1,78 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
+
+    <!-- wire rest with SI -->
+    <int:gateway id="hostInfoServiceRESTGateway"
+    			 service-interface="com.luckyryan.sample.ws.HostStatusInfoServiceREST"
+    			 default-request-channel="saveInfoFormChannelREST">
+    			 
+    	<int:method name="getInfo" request-channel="getInfoFormChannelREST" />		 
+    	<int:method name="saveInfo" request-channel="saveInfoFormChannelREST" />
+    	<int:method name="getAll" request-channel="allInfoFormChannelREST" />    	
+    	
+    </int:gateway>
+    
+    <int:gateway id="commandServiceRESTGateway"
+    			 service-interface="com.luckyryan.sample.ws.UserCommandServiceREST"
+    			 default-request-channel="saveCommandFormChannelREST">
+    			 
+    	<int:method name="saveCommand" request-channel="saveCommandFormChannelREST" />		 
+    	<int:method name="getCommand" request-channel="getCommandChannelREST" />
+    	<int:method name="getLastUnProcessCommand" request-channel="getLastCommandChannelREST" />
+    	<int:method name="getAll" request-channel="getAllCommandChannelREST" />
+    </int:gateway>
+
+   
+    <!-- route SOAP calls to WS interface -->
+    <int:channel id="getInfoFormChannelREST" />
+    <int:channel id="saveInfoFormChannelREST" />
+    <int:channel id="allInfoFormChannelREST" />
+    
+    <int:channel id="saveCommandFormChannelREST" />
+    <int:channel id="getCommandChannelREST" />
+    <int:channel id="getLastCommandChannelREST" />
+    <int:channel id="getAllCommandChannelREST" />
+
+	<!-- Host Info -->
+    <int:chain input-channel="getInfoFormChannelREST">
+    	<int:transformer ref="transformer" method="stringToLong" />
+    	<int:service-activator ref="hostStatusInfoService" method="getInfo" />
+    	<int:transformer ref="transformer" method="hostInfoToDto" />
+    </int:chain>
+    <int:chain input-channel="saveInfoFormChannelREST">
+    	<int:transformer ref="transformer" method="dtoToHostInfo" />
+    	<int:service-activator ref="hostStatusInfoService" method="saveInfo" />
+    	<int:transformer ref="transformer" method="hostInfoToDto" />
+    </int:chain>
+    <int:chain input-channel="allInfoFormChannelREST">
+    	<int:transformer ref="transformer" method="stringToLong" />
+    	<int:service-activator ref="hostStatusInfoService" method="getAll" />
+    	<int:transformer ref="transformer" method="hostInfoListToDtoList" />
+    </int:chain>
+    
+    <!-- User Command -->
+    <int:chain input-channel="saveCommandFormChannelREST">
+    	<int:transformer ref="transformer" method="dtoToUserCommand" />
+    	<int:service-activator ref="userCommandService" method="saveCommand" />
+    	<int:transformer ref="transformer" method="userCommandToDto" />
+    </int:chain>
+    <int:chain input-channel="getCommandChannelREST">
+    	<int:transformer ref="transformer" method="stringToLong" />
+    	<int:service-activator ref="userCommandService" method="getCommand" />
+    	<int:transformer ref="transformer" method="userCommandToDto" />
+    </int:chain>
+    <int:chain input-channel="getLastCommandChannelREST">
+    	<int:transformer ref="transformer" method="stringToStr" />
+    	<int:service-activator ref="userCommandService" method="getLastUnProcessCommand" />
+    	<int:transformer ref="transformer" method="userCommandToDto" />
+    </int:chain>
+    <int:chain input-channel="getAllCommandChannelREST">
+    	<int:transformer ref="transformer" method="stringToStr" />
+    	<int:service-activator ref="userCommandService" method="getAll" />
+    	<int:transformer ref="transformer" method="userCmdListToDtoList" />
+    </int:chain>
+
+</beans>
