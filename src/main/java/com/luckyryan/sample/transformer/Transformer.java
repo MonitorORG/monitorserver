@@ -1,6 +1,7 @@
 package com.luckyryan.sample.transformer;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -26,6 +27,8 @@ public class Transformer {
     	info.setCpuTotalUsed(dto.getCpuTotalUsed());
     	info.setCpuCount(dto.getCpuCount());
     	info.setMacAddress(dto.getMacAddress());
+    	info.setProcessList(dto.getProcessList());
+    	info.setProcessStatusResults(dto.getProcessStatusResults());    	
     	
         return info;
     }
@@ -40,9 +43,25 @@ public class Transformer {
     	dto.setCpuTotalUsed(info.getCpuTotalUsed());
     	dto.setCpuCount(info.getCpuCount());
     	dto.setMacAddress(info.getMacAddress());
+    	dto.setProcessList(info.getProcessList());
+    	dto.setProcessStatusResults(info.getProcessStatusResults());
     	
-    	// Add client command, This command is send by browser 
-    	dto.setCommandStr("cmd /c tasklist");
+    	java.text.DateFormat format = new java.text.SimpleDateFormat("yyyyMMddhhmmss");  
+    	if (info.getCreateDate() != null) {
+    		try {
+    			dto.setCreateDate(format.format(info.getCreateDate()));
+    		} catch (Exception e) {
+    			dto.setCreateDate("");
+    		}
+    	}
+    	
+    	if (info.getUpdateDate() != null) {
+    		try {
+    			dto.setUpdateDate(format.format(info.getUpdateDate()));
+    		} catch (Exception e) {
+    			dto.setUpdateDate("");
+    		}
+    	}
     	
         return dto;
     }
@@ -59,6 +78,27 @@ public class Transformer {
         	dto.setCpuTotalUsed(info.getCpuTotalUsed());
         	dto.setCpuCount(info.getCpuCount());
         	dto.setMacAddress(info.getMacAddress());
+        	
+        	dto.setProcessList(info.getProcessList());
+        	dto.setProcessStatusResults(info.getProcessStatusResults());
+        	
+        	java.text.DateFormat format = new java.text.SimpleDateFormat("yyyyMMddhhmmss");  
+        	if (info.getCreateDate() != null) {
+        		try {
+        			dto.setCreateDate(format.format(info.getCreateDate()));
+        		} catch (Exception e) {
+        			dto.setCreateDate("");
+        		}
+        	}
+        	
+        	if (info.getUpdateDate() != null) {
+        		try {
+        			dto.setUpdateDate(format.format(info.getUpdateDate()));
+        		} catch (Exception e) {
+        			dto.setUpdateDate("");
+        		}
+        	}
+        	
         	dtoList.add(dto);
     	}
         return dtoList;

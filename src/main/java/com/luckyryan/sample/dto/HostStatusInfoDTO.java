@@ -1,5 +1,7 @@
 package com.luckyryan.sample.dto;
 
+import java.util.Date;
+
 public class HostStatusInfoDTO {
 
 	private Long id;
@@ -10,8 +12,15 @@ public class HostStatusInfoDTO {
 	private double freeMem;
 	
 	private String macAddress;
+
+	private String createDate;
+	private String updateDate;
+	
+	private String processList;
+	private String processStatusResults;
 	
 	private String commandStr;
+	
 	public String getCommandStr() {
 		return commandStr;
 	}
@@ -60,6 +69,30 @@ public class HostStatusInfoDTO {
 	}
 	public void setMacAddress(String macAddress) {
 		this.macAddress = macAddress;
+	}
+	public String getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
+	}
+	public String getUpdateDate() {
+		return updateDate;
+	}
+	public void setUpdateDate(String updateDate) {
+		this.updateDate = updateDate;
+	}
+	public String getProcessList() {
+		return processList;
+	}
+	public void setProcessList(String processList) {
+		this.processList = processList;
+	}
+	public String getProcessStatusResults() {
+		return processStatusResults;
+	}
+	public void setProcessStatusResults(String processStatusResults) {
+		this.processStatusResults = processStatusResults;
 	}	
 	
 }

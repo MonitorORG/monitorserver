@@ -27,6 +27,9 @@ public class HostStatusInfo {
 	private Date createDate;
 	private Date updateDate;
 	
+	private String processList;
+	private String processStatusResults;
+	
 	@OneToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name="hostId")
     private HostStatic host;
@@ -97,6 +100,18 @@ public class HostStatusInfo {
 	}
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
+	}
+	public String getProcessList() {
+		return processList;
+	}
+	public void setProcessList(String processList) {
+		this.processList = processList;
+	}
+	public String getProcessStatusResults() {
+		return processStatusResults;
+	}
+	public void setProcessStatusResults(String processStatusResults) {
+		this.processStatusResults = processStatusResults;
 	}	
 	
 }

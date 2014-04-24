@@ -17,7 +17,8 @@
 	<script type="text/javascript" src='<c:url value="/main/js/i18n/grid.locale-en.js"></c:url>'></script>
 	<script type="text/javascript" src='<c:url value="/main/js/grid.subgrid.js"></c:url>'></script>
 	
-		<script src="js/window.js" type="text/javascript"></script>
+	<script src="js/window.js" type="text/javascript"></script>
+	
     <script type="text/javascript">
     
     	$(document).ready(function(){
@@ -26,7 +27,7 @@
     			url:'/monitorserver/services/hostInfo/hostStatusInfoService/allHost/1',
     			datatype: "json",
     			height: 450,
-    			colNames:['ID', 'Host Name','Mac Address', 'CPU Used', 'Free Mem', 'Mem Used', 'Command'], 
+    			colNames:['ID', 'Host Name','Mac Address', 'CPU Used', 'Free Mem', 'Mem Used', 'Process Status', 'Process Manage', 'Command', 'Process List'], 
 				colModel:[ 
 					{name:'id',index:'id', width:40, sorttype:"int"}, 
 					{name:'hostname',index:'hostname', width:150}, 
@@ -34,7 +35,10 @@
 					{name:'cpuTotalUsed',index:'cpuTotalUsed', width:80, formatter: cpuUsedFormatter },
 					{name:'freeMem',index:'freeMem', hidden:true},
 					{name:'totalMem',index:'totalMem', width:80, formatter: memUsedFormatter }, 
-					{name:'commandCol',index:'commandCol', width:200, align: 'center', formatter: commandColFormatter}
+					{name:'processStatusResults',index:'processStatusResults', width:200, align: 'center', formatter: processStatusFormatter},
+					{name:'processCmd',index:'processCmd', width:200, align: 'center', formatter: processCmdFormatter},
+					{name:'commandCol',index:'commandCol', width:200, align: 'center', formatter: commandColFormatter},
+					{name:'processList',index:'processList', width:200}
 				],
     			rowNum:10,
     			rowList:[10,20,30],
@@ -112,6 +116,22 @@
     		});
     		jQuery("#hostCommandsTable").jqGrid('navGrid','#hostCommandsPager',{add:false,edit:false,del:false});
     		
+    		$("#addProcessBtn").click(function() {
+				var newProcessInput = $("#processInput").val();
+				if (newProcessInput != "") {
+					$("#processListTable").append("<tr class='processtr'><td>" + newProcessInput + "</td><td><button onclick='delProcessRow(this)'>Del</button></td></tr>");
+					
+					var statusStr = $("#processStatusStr").val();
+					statusStr = statusStr + "{" + newProcessInput + ":UnKnow}";
+					$("#processStatusStr").val(statusStr);
+					
+					var processlist = $("#processListStr").val();
+					processlist = processlist + "#" + newProcessInput + "|";
+					$("#processListStr").val(processlist);
+				}
+				$("#processInput").val("")
+    		});
+    		
     		//每10秒执行，无限次，并命名计时器名称为C
     		//若时间间隔抵到，但函式程序仍未完成则需等待执行函式完成后再继续计时
     		//$('body').everyTime('1das','C',function(){
@@ -121,6 +141,46 @@
 				refreshCommand();
     		},0,true);
     	});
+    		
+    	function commitProcessCommand() {			
+    		var hostId = $("#processInputId").val();
+			var macAddress = $("#processInputMacAddress").val();
+			var processListStr = $("#processListStr").val();
+			var processStatusStr = $("#processStatusStr").val();
+			
+			var selRowId = $("#hostCommandsTable").jqGrid('getGridParam', 'selrow');
+			
+			if (macAddress != '') {	// processListStr has been changed
+			
+				$("#hostCommandsTable").setCell(selRowId, 'processList', processListStr);
+				$("#hostCommandsTable").setCell(selRowId, 'processStatusResults', processStatusStr);
+			
+				$.ajax({
+					type: "POST",
+					url: "/monitorserver/services/hostInfo/hostStatusInfoService/create",
+					data: JSON.stringify({macAddress:macAddress,processList:processListStr,processStatusResults:null}),
+					contentType: "application/json; charset=utf-8",
+					dataType: "json",
+					success: function(data){
+						closeProcessPopWindowManual();	
+					},
+					failure: function(errMsg) {
+						
+					}
+				});			
+			}  
+    	}
+		
+		function delProcessRow(delBtn) {
+			
+			var delProcessName = $(delBtn).parent().parent().find("td:first").text();
+			alert(delProcessName);
+			var processlist = $("#processListStr").val();
+			processlist = processlist.replace("#" + delProcessName + "|", "");
+			$("#processListStr").val(processlist);
+			
+			$(delBtn).parent().parent().remove();
+		}
 		
 		function cpuUsedFormatter(cellvalue, options, rowdata) {
 			return Number(rowdata.cpuTotalUsed).toFixed(2);
@@ -144,9 +204,35 @@
 			popCenterWindow();
 		}
 		
+		function showInputProcessPanel(id, macAddress) {
+			var selRowId = $("#hostCommandsTable").jqGrid('getGridParam', 'selrow');
+			if (id != selRowId) {			
+				$("#processInputId").val(id);
+				$("#processInputMacAddress").val(macAddress);
+				$("#processListStr").val("");
+				$("#processStatusStr").val("");
+				
+				$(".processtr").remove();				
+				jQuery("#hostCommandsTable").setSelection(id);					
+				var processlist = $("#hostCommandsTable").getCell(id, 'processList');				
+				$("#processListTable").append(processlist.replace(/\#/g, "<tr class='processtr'><td>").replace(/\|/g, "</td><td><button onclick='delProcessRow(this)'>Del</button></td></tr>"));
+				$("#processListStr").val(processlist);
+			}
+			popProcessWindow();
+		}
+		
 		function resultShowFormatter(cellvalue, options, rowdata) {
 			//alert(JSON.stringify(rowdata));
 			return "<span id='commandResultStr" + rowdata.id + "' title='" + rowdata.resultStr + "'>Result</span>";
+		}
+		
+		function processStatusFormatter(cellvalue, options, rowdata) {
+			//alert(JSON.stringify(rowdata));
+			return "<span id='commandResultStr" + rowdata.id + "' title='" + rowdata.processStatusResults + "'>Result</span>";
+		}
+		
+		function processCmdFormatter(cellvalue, options, rowdata) {
+			return "<button type='button' onclick='showInputProcessPanel(\"" + rowdata.id + "\", \"" + rowdata.macAddress + "\")'>Process Manage</button>";
 		}
     	
     	function refreshAllHost() {
@@ -269,6 +355,28 @@
 			</table>
 		</div> 
 	</div> 
+	
+	<div id="processWindow" style="z-index:999;display:none;">
+		<div id="title" class="title">Process Management Window</div>
+		<div class="content">
+			<input type='hidden' id='processInputId'/>
+			<input type='hidden' id='processInputMacAddress'/>
+			<input type='hidden' id='processListStr'/>
+			<input type='hidden' id='processStatusStr'/>
+			<table id="processListTable">
+				<tr>
+					<td><input type='text' id='processInput' style='width:200' /></td>
+					<td><button id='addProcessBtn' type='button'>Add</button></td>
+				</tr>
+			</table>			
+			<table style="">
+				<tr>
+					<td style="text-align:right"><button id='submitProcessBtn' type='button' onclick='commitProcessCommand()'>Commit</button></td>
+					<td><button id='closeProcessBtn' class="close" type='button'>Close</button></td>
+				</tr>
+			</table>
+		</div> 
+	</div>
 	
 	<div style="text-align:right;margin-right:10px;">
 		<a href="agent-download" target="blank"><button>Download Agent 1.0</button></a>

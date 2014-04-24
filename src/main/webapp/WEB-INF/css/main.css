@@ -1,4 +1,4 @@
-.window{ 
+#processWindow, .window{ 
 	width:400px; 
 	background-color:#d0def0; 
 	position:absolute; 
@@ -8,6 +8,7 @@
 } 
 
 .content{ 
+	height:auto !important;
 	height:80px; 
 	background-color:#FFF; 
 	font-size:14px; 

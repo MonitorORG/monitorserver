@@ -34,3 +34,19 @@ function popCenterWindow(){
 	$("#center").css("top",popY).css("left",popX).slideToggle("slow");  
 	closePopWindow(); 
 } 
+
+// ---------------
+function closeProcessPopWindowManual() {	
+	$("#processWindow").hide("slow"); 
+}
+
+function popProcessWindow(){ 
+	init(); 
+	var popY=windowHeight/2 - 200; 
+	var popX=windowWidth/2; 
+	$("#processWindow").css("top",popY).css("left",popX).slideToggle("slow");  
+	
+	$("#closeProcessBtn").click(function() {
+		$("#processWindow").hide("slow");
+	});
+} 

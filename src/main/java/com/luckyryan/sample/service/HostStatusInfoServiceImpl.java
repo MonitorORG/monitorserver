@@ -26,7 +26,21 @@ public class HostStatusInfoServiceImpl implements HostStatusInfoService {
 		HostStatusInfo host = dao.getHostByMacAddress(info.getMacAddress());
 		if (host != null && host.getId() != null) {
 			info.setId(host.getId());
+			info.setCreateDate(host.getCreateDate());
 			info.setUpdateDate(new Date());
+			
+			if (info.getProcessStatusResults() == null) {	// send by broswer
+				
+			}
+			
+			if (info.getProcessList() == null) {	// send by agent
+				
+			}
+			
+//			if (!info.getProcessList().equals(host.getProcessList())) {	// Update process list
+//				
+//			}
+			
 		} else {
 			info.setCreateDate(new Date());
 			info.setUpdateDate(new Date());
