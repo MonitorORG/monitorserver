@@ -28,7 +28,8 @@ public class Transformer {
     	info.setCpuCount(dto.getCpuCount());
     	info.setMacAddress(dto.getMacAddress());
     	info.setProcessList(dto.getProcessList());
-    	info.setProcessStatusResults(dto.getProcessStatusResults());    	
+    	info.setProcessStatusResults(dto.getProcessStatusResults());  
+    	info.setIsAgentCommited(dto.getIsAgentCommited());
     	
         return info;
     }

@@ -41,26 +41,6 @@
 
     </properties>
 
-    <build>
-
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <excludes>
-                    <exclude>*.xml</exclude>
-                </excludes>
-                <filtering>true</filtering>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>*.xml</include>
-                </includes>
-                <filtering>false</filtering>
-            </resource>
-        </resources>
-    </build>
-
     <dependencies>
 
         <!-- Servlet & JSTL -->
@@ -255,7 +235,7 @@
 			
     </dependencies>
 
-
+	<!-- 
     <profiles>
         <profile>
             <id>jetty</id>
@@ -302,5 +282,51 @@
                 </plugins>
             </build>
         </profile>
-    </profiles>
+    </profiles> -->
+    
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>*.xml</exclude>
+                </excludes>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>*.xml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+        
+        <plugins>
+        <!-- 
+	  		<plugin>
+	  			<groupId>org.apache.tomcat.maven</groupId>
+	         	<artifactId>tomcat7-maven-plugin</artifactId>
+	         	<version>2.1</version>
+	        	<configuration>
+	            	<url>http://localhost:8080/manager/text</url>
+	            	<server>tomcat</server>
+	            	<warFile>${basedir}/target/monitorserver-1.0.war</warFile>
+	            	<update>true</update>
+	        		<path>/monitorserver</path>
+	            	<username>admin</username>  
+	        		<password>admin</password>  
+	        	</configuration>
+				<executions>
+					<execution>
+						<id>deploy-jar</id>
+						<phase>install</phase>
+						<goals>
+							<goal>deploy-only</goal>
+						</goals>
+					</execution>
+				</executions>
+	       	</plugin> -->
+  		</plugins>  
+    </build>
 </project>

@@ -1,7 +1,5 @@
 package com.luckyryan.sample.dto;
 
-import java.util.Date;
-
 public class HostStatusInfoDTO {
 
 	private Long id;
@@ -18,8 +16,11 @@ public class HostStatusInfoDTO {
 	
 	private String processList;
 	private String processStatusResults;
+	// 0000: Stop
+	// 0001: Running
 	
-	private String commandStr;
+	private String commandStr;	
+	private boolean isAgentCommited;	// null is default
 	
 	public String getCommandStr() {
 		return commandStr;
@@ -93,6 +94,12 @@ public class HostStatusInfoDTO {
 	}
 	public void setProcessStatusResults(String processStatusResults) {
 		this.processStatusResults = processStatusResults;
+	}
+	public boolean getIsAgentCommited() {
+		return isAgentCommited;
+	}
+	public void setIsAgentCommited(boolean isAgentCommited) {
+		this.isAgentCommited = isAgentCommited;
 	}	
 	
 }

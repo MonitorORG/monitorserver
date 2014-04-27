@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 @Entity
 public class HostStatusInfo {
@@ -29,6 +30,9 @@ public class HostStatusInfo {
 	
 	private String processList;
 	private String processStatusResults;
+	
+	@Transient
+	private Boolean isAgentCommited;	// null is default
 	
 	@OneToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name="hostId")
@@ -112,6 +116,11 @@ public class HostStatusInfo {
 	}
 	public void setProcessStatusResults(String processStatusResults) {
 		this.processStatusResults = processStatusResults;
-	}	
-	
+	}
+	public Boolean getIsAgentCommited() {
+		return isAgentCommited;
+	}
+	public void setIsAgentCommited(Boolean isAgentCommited) {
+		this.isAgentCommited = isAgentCommited;
+	}
 }

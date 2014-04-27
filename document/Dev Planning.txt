@@ -1,0 +1,30 @@
+
+Waiting: 
+1. 支持中文
+3. execute multi-command
+4. agnet control
+客户端识别，用户登录，管理
+
+
+
+
+Indoing:
+2. proces & status monitor
+5. auto deploy with maven
+
+
+
+
+
+
+Done:
+
+
+
+
+
+
+
+
+
+
