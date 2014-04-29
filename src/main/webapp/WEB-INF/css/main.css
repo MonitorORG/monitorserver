@@ -42,6 +42,10 @@
 	background: url(../image/stop.gif) no-repeat left;
 }
 
+.wait {
+	background: url(../image/wait.png) no-repeat left;
+}
+
 .procStatus {
 	text-align:left;
 }

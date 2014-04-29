@@ -48,7 +48,7 @@ public class HostStatusInfoServiceImpl implements HostStatusInfoService {
 				StringBuffer initProcStaInfoBuf = new StringBuffer();
 				for (String procName : StringUtil.getProcessArray(info.getProcessList())) {
 					initProcStaInfoBuf.append(ProcessStatus.START_SYMBOL)
-									  .append(ProcessStatus.STOP)
+									  .append(ProcessStatus.WAITING)
 									  .append(ProcessStatus.SEP_SYMBOL)
 									  .append(procName)
 									  .append(ProcessStatus.END_SYMBOL);
