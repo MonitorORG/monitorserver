@@ -50,16 +50,8 @@
     			sortorder: "desc",
     			multiselect: false,
 				beforeSelectRow: function(rowId, e) {
-					var selRowId = $("#hostCommandsTable").jqGrid('getGridParam', 'selrow');
-					//if (selRowId) {
-					//	alert(selRowId);
-					//	//$("#hostCommandsTable").collapseSubGridRow(selRowId);
-					//	//$("#hostCommandsTable_" + selRowId + "_t").trigger("reload");
-					//	$("#hostCommandsTable").toggleSubGridRow(selRowId);
-					//}
 				},
 				onSelectRow: function(id){ 			
-					//var selRowId = $("#hostCommandsTable").jqGrid('getGridParam', 'selrow');				
 				},
     			subGrid: true,
     			caption: "Host Commands",
@@ -110,10 +102,6 @@
 					jQuery("#hostCommandsTable").setSelection(row_id);
     			},
     			subGridRowColapsed: function(subgrid_id, row_id) {
-    			// this function is called before removing the data
-    			//var subgrid_table_id;
-    			//subgrid_table_id = subgrid_id+"_t";
-    			//jQuery("#"+subgrid_table_id).remove();
     			}
     		});
     		jQuery("#hostCommandsTable").jqGrid('navGrid','#hostCommandsPager',{add:false,edit:false,del:false});
@@ -142,7 +130,6 @@
 		
 		function commandColFormatter(cellvalue, options, rowdata) {
 			return "<button type='button' onclick='showInputCommandPanel(\"" + rowdata.id + "\", \"" + rowdata.macAddress + "\")'>Input Command</button>";
-			//return "<input type='text' id='" + rowdata.id + "_cmdinput' style='width:200' /><button name='" + rowdata.id + "_cmdinput' type='button' onclick='runCommand(this, \"" + rowdata.macAddress + "\")'>Run Tasklist Command</button>";
 		}
 		
 		function showInputCommandPanel(id, macAddress) {
@@ -155,7 +142,6 @@
 		}
 		
 		function resultShowFormatter(cellvalue, options, rowdata) {
-			//alert(JSON.stringify(rowdata));
 			return "<span id='commandResultStr" + rowdata.id + "' title='" + rowdata.resultStr + "'>Result</span>";
 		}
     	
@@ -169,11 +155,7 @@
 	            complete :function() {
 	            },
 	            success: function(hostInfoArray){
-					$.each(hostInfoArray, function(i, hostInfo){   
-					
-						//hostGrid.setCell(hostInfo.id, hostInfo);
-						//hostGrid.setCell(hostInfo.id, hostInfo);
-						//hostGrid.setCell(hostInfo.id, hostInfo);
+					$.each(hostInfoArray, function(i, hostInfo){  
 						
 						if (jQuery.inArray(hostInfo.id, ids)) {
 							hostGrid.setRowData(hostInfo.id, hostInfo);
@@ -184,18 +166,9 @@
 					});
 					
 	            }});
-				
-				var selRowId = hostGrid.jqGrid('getGridParam', 'selrow');
-				if (selRowId) {
-					//$("#hostCommandsTable").toggleSubGridRow(selRowId);
-					//$("#hostCommandsTable").expandSubGridRow(selRowId);
-					//$("#hostCommandsTable_" + selRowId + "_t").trigger("reload");
-				}
-				
     	}
     	
     	function runCommand() {
-			//var commandInputStr = $('#' + $(comBtn).attr('name')).val();
 			var commandInputStr = $("#cmdinput").val();
 			var macAddress = $("#cmdinputMacAddress").val();
 			var selRowId = $("#hostCommandsTable").jqGrid('getGridParam', 'selrow');
@@ -220,14 +193,7 @@
 				});			
 			}  
 			
-			closePopWindowManual();			
-			//$("#hostCommandsTable").toggleSubGridRow(selRowId);
-			//$("#hostCommandsTable").expandSubGridRow(selRowId);
-			//var hostMacAddress = $("#hostCommandsTable").getCell(selRowId,"macAddress");
-			//$("#hostCommandsTable_" + selRowId + "_t").jqGrid("setGridParam", {
-			//	url: "/monitorserver/services/command/userCommandService/allcommand/"+hostMacAddress, 
-			//	datatype: "json"
-			//}).trigger("reload");
+			closePopWindowManual();	
     	}
     	
     	function refreshCommand() {
