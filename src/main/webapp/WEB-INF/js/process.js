@@ -75,8 +75,8 @@ function processCmdFormatter(cellvalue, options, rowdata) {
 
 function getProcStaTableHtml(id, processStatusStr) {
 	if (processStatusStr == null) processStatusStr = "";
-	return "<div>" + processStatusStr.replace(/\#/g, "<span>").replace(/\@/g, "</span>&nbsp;<span>").replace(/\|/g, "</span><br/>") + 
-			"</div>";
+	return "<div class='procStatus'>" + processStatusStr.replace(/\#\*1/g, "<span class='running'>&nbsp;&nbsp;</span>").replace(/\#\*0/g, "<span class='stop'>&nbsp;&nbsp;</span>").replace(/\@/g, "&nbsp;<span>").replace(/\|/g, "</span><br/>") + 
+		"</div>";
 	//return "<table id='procStaTable" + id + "' border='0' cellpadding='0' cellspacing='0' class='processStatusTable'>" + 
 	//		processStatusStr.replace(/\#/g, "<tr><td width='50%'>").replace(/\@/g, "</td><td>").replace(/\|/g, "</td></tr>") + 
 	//		"</table>";

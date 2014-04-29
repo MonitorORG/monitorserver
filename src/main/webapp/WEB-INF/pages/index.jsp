@@ -30,7 +30,7 @@
     			height: 450,
     			colNames:['Process List', 'Free Mem', 'ID', 'Host Name','Mac Address', 'CPU Used', 'Mem Used', 'Process Status', 'Process Manage', 'Command'], 
 				colModel:[ 
-					{name:'processList',index:'processList', hidden:false},
+					{name:'processList',index:'processList', hidden:true},
 					{name:'freeMem',index:'freeMem', hidden:true},
 					{name:'id',index:'id', width:40, sorttype:"int"}, 
 					{name:'hostname',index:'hostname', width:150}, 

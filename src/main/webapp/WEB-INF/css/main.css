@@ -32,4 +32,16 @@
  
 .title img{ 
 	float:right; 
-} 
+}
+
+.running {
+	background: url(../image/running.gif) no-repeat left;
+}
+
+.stop {
+	background: url(../image/stop.gif) no-repeat left;
+}
+
+.procStatus {
+	text-align:left;
+}

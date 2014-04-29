@@ -32,16 +32,11 @@ public class HostStatusInfoServiceImpl implements HostStatusInfoService {
 			info.setCreateDate(orginal.getCreateDate());
 			info.setUpdateDate(new Date());
 			
-			System.out.println("IsCommited: " + info.getIsAgentCommited());
-			System.out.println("ProcessList: " + info.getProcessList());
-			System.out.println("OProcessList: " + orginal.getProcessList());
-			System.out.println("ProcessStatusResults: " + info.getProcessStatusResults());
 			if (info.getIsAgentCommited() != null && info.getIsAgentCommited()) {
 				// don't update process list
 				boolean isProcessListChanged = !StringUtil.isEquals(info.getProcessList(), orginal.getProcessList());
 				info.setProcessList(orginal.getProcessList());
 				
-				System.out.println("isProcessListChanged: " + isProcessListChanged);
 				if (isProcessListChanged) {
 					// don't update process status
 					info.setProcessStatusResults(orginal.getProcessStatusResults());
