@@ -12,6 +12,10 @@ jdbc.password=whitedove
 agent.download.path=E:/monitorserverworkspace/agent/Agent.zip
 agent.download.filename=Agent.zip
 
+
+
+
+
 Release Server steps:
 
 1. Package war file

@@ -34,9 +34,9 @@
         <jdbc.password>whitedove</jdbc.password>
         <jdbc.driverClassName>org.postgresql.Driver</jdbc.driverClassName>
         <jdbc.database.name>sample_monitor</jdbc.database.name>
-        <jdbc.database.server>192.168.1.105</jdbc.database.server>
+        <jdbc.database.server>192.168.11.22</jdbc.database.server>
         <jdbc.url>
-            <![CDATA[jdbc:postgresql://192.168.1.105:5432/${jdbc.database.name}?autoReconnect=true&amp;createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8]]>
+            <![CDATA[jdbc:postgresql://192.168.11.22:5432/${jdbc.database.name}?autoReconnect=true&amp;createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8]]>
         </jdbc.url>
 
     </properties>
