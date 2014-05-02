@@ -19,10 +19,10 @@ agent.download.filename=Agent.zip
 Release Server steps:
 
 1. Package war file
-2. Change /MonitorServer-1.0.war/WEB-INF/classes/db.properties
+2. Change /MonitorServer-1.0.war/WEB-INF/classes/db.properties	(DONE)
 3. Change /MonitorServer-1.0.war/WEB-INF/classes/constantsutil.properties
-4. Change /MonitorServer-1.0.war/WEB-INF/pages/index.jsp
-	- replace "/MonitorServer-1.0" "/monitorserver"	
+4. Change /MonitorServer-1.0.war/WEB-INF/pages/index.jsp	(DONE)
+	- replace "/MonitorServer-1.0" "/monitorserver"		(DONE)
 5. change the war file name to monitorserver
 
 
@@ -30,6 +30,6 @@ Release Agent steps:
 
 1. Package Agent, and copy Agent.jar to /Agent
 2. Replace /Agent/Agent.jar/META-INF/MANIFEST.MF by MANIFEST.MF
-3. Changed /Agent/properties.properties
+3. Changed /Agent/properties.properties	(DONE)
 4. Zip /Agent file to Agent.zip
 5. Copy Agent.zip file to /downloadagent/Agent.zip
