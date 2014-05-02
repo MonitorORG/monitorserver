@@ -1,5 +1,6 @@
 package com.luckyryan.sample.dao;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -19,4 +20,7 @@ public interface UserCommandDao extends CrudRepository<UserCommand,Long> {
 	
 	@Query("select u from UserCommand u where u.hostMacAddress= :macAddress order by u.creationDate desc")  
 	public List<UserCommand> getAllByMacAddress(@Param("macAddress") String macAddress) throws InvalidUserException;
+	
+	@Query("select u from UserCommand u where u.id in :ids order by u.creationDate desc")  
+	public List<UserCommand> findByIds(@Param("ids") Collection<Long> ids) throws InvalidUserException;
 }

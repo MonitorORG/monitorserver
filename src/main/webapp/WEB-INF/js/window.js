@@ -15,12 +15,18 @@ function init(){
 //关闭窗口的方法 
 function closePopWindow() {	
 	$(".close").click(function() {
-		$(".window").hide("slow"); 
+		closePopWindowManual();
 	});
 }
 
 function closePopWindowManual() {	
-	$(".window").hide("slow"); 
+	$(".window").hide("slow");
+	
+	// for multiple commands executing
+	$(".executingInfo").remove();
+	$('body').stopTime ('D');
+	newCommandBatchIds = "";
+	hostindex = 0;
 }
 	
 //定义弹出居中窗口的方法 
@@ -37,7 +43,7 @@ function popCenterWindow(){
 
 // ---------------
 function closeProcessPopWindowManual() {	
-	$("#processWindow").hide("slow"); 
+	$("#processWindow").hide("slow"); 	
 }
 
 function popProcessWindow(){ 

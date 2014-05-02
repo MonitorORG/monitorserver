@@ -12,4 +12,5 @@ public interface UserCommandService {
 	public UserCommand getLastUnProcessCommand(String macAddress) throws InvalidUserException;
 	
 	public List<UserCommand> getAll(String macAddress) throws InvalidUserException;
+	public List<UserCommand> findByIds(String ids) throws InvalidUserException;
 }

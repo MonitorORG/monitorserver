@@ -1,5 +1,7 @@
 package com.luckyryan.sample.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.luckyryan.sample.dao.UserCommandDao;
 import com.luckyryan.sample.dao.model.UserCommand;
 import com.luckyryan.sample.exception.InvalidUserException;
+import com.socket.server.util.StringUtil;
 
 @Service("userCommandService")
 public class UserCommandServiceImpl implements UserCommandService {
@@ -45,6 +48,32 @@ public class UserCommandServiceImpl implements UserCommandService {
 		return dao.getAllByMacAddress(macAddress);
 	}
 
+	@Override
+	public List<UserCommand> findByIds(String ids) throws InvalidUserException {
+		
+		List<Long> newIds = new ArrayList<Long>();
+				
+		if (StringUtil.isEmpty(ids)) {
+			return new ArrayList<UserCommand>();
+		}
+		
+		for(String id : ids.split(",")) {
+			try {
+				if (!StringUtil.isEmpty(id)) {
+					newIds.add(Long.valueOf(id));
+				}
+			} catch (Exception e) {
+				
+			}
+			
+		}
+		
+		if (newIds.size() > 0) {
+			List<UserCommand> list = dao.findByIds(newIds);
+			return list;
+		} else {
+			return new ArrayList<UserCommand>();
+		}
+	}
 	
-
 }

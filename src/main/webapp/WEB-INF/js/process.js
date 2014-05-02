@@ -20,6 +20,7 @@ function commitProcessCommand() {
 	if (macAddress != '') {	// processListStr has been changed
 	
 		$("#hostCommandsTable").setCell(selRowId, 'processList', processListStr);
+		//$("#hostCommandsTable").setCell(selRowId, 'processStatusResults', processStatusStr);
 	
 		$.ajax({
 			type: "POST",

@@ -23,6 +23,7 @@
     	<int:method name="getCommand" request-channel="getCommandChannelREST" />
     	<int:method name="getLastUnProcessCommand" request-channel="getLastCommandChannelREST" />
     	<int:method name="getAll" request-channel="getAllCommandChannelREST" />
+    	<int:method name="findByIds" request-channel="findByIdsCommandChannelREST" />
     </int:gateway>
 
    
@@ -35,6 +36,7 @@
     <int:channel id="getCommandChannelREST" />
     <int:channel id="getLastCommandChannelREST" />
     <int:channel id="getAllCommandChannelREST" />
+    <int:channel id="findByIdsCommandChannelREST" />
 
 	<!-- Host Info -->
     <int:chain input-channel="getInfoFormChannelREST">
@@ -74,5 +76,10 @@
     	<int:service-activator ref="userCommandService" method="getAll" />
     	<int:transformer ref="transformer" method="userCmdListToDtoList" />
     </int:chain>
-
+	<int:chain input-channel="findByIdsCommandChannelREST">
+    	<int:transformer ref="transformer" method="stringToStr" />
+    	<int:service-activator ref="userCommandService" method="findByIds" />
+    	<int:transformer ref="transformer" method="userCmdListToDtoList" />
+    </int:chain>
+    
 </beans>

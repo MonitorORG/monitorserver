@@ -49,3 +49,9 @@
 .procStatus {
 	text-align:left;
 }
+
+.executing {
+	background: url(../image/loding.gif) no-repeat left;
+	width: 150px;
+	display: block;
+}

@@ -19,8 +19,11 @@
 	
 	<script src="js/window.js" type="text/javascript"></script>
 	<script src="js/process.js" type="text/javascript"></script>
+	<script src="js/selectcol.js" type="text/javascript"></script>
 	
     <script type="text/javascript">
+	
+		var isBatchInputCommand = false;
     
     	$(document).ready(function(){
 		
@@ -28,7 +31,7 @@
     			url:'/monitorserver/services/hostInfo/hostStatusInfoService/allHost/1',
     			datatype: "json",
     			height: 450,
-    			colNames:['Process List', 'Free Mem', 'ID', 'Host Name','Mac Address', 'CPU Used', 'Mem Used', 'Process Status', 'Process Manage', 'Command'], 
+    			colNames:['Process List', 'Free Mem', 'ID', 'Host Name','Mac Address', 'CPU Used', 'Mem Used', 'Process Status', 'Process Manage', 'Command', '<input class="gridparentcheckbox" onclick="clickGridParentCheckbox(this, event)" type="checkbox" />'], 
 				colModel:[ 
 					{name:'processList',index:'processList', hidden:true},
 					{name:'freeMem',index:'freeMem', hidden:true},
@@ -39,7 +42,8 @@
 					{name:'totalMem',index:'totalMem', width:80, formatter: memUsedFormatter }, 
 					{name:'processStatusResults',index:'processStatusResults', width:200, align: 'center', formatter: processStatusFormatter},
 					{name:'processCmd',index:'processCmd', width:200, align: 'center', formatter: processCmdFormatter},
-					{name:'commandCol',index:'commandCol', width:200, align: 'center', formatter: commandColFormatter}
+					{name:'commandCol',index:'commandCol', width:200, align: 'center', formatter: commandColFormatter},
+					{name:'selectCol',index:'selectCol', width:25, align: 'center', sortable: false, formatter: selectColFormatter}
 					
 				],
     			rowNum:10,
@@ -51,10 +55,10 @@
     			multiselect: false,
 				beforeSelectRow: function(rowId, e) {
 				},
-				onSelectRow: function(id){ 			
+				onSelectRow: function(id){ 				
 				},
     			subGrid: true,
-    			caption: "Host Commands",
+    			caption: "<table width='100%'><tr><td><b>Host Commands</b></td><td>&nbsp;</td><td style='text-align:right'><button type='button' onclick='showInputCommandPanel(undefined, undefined)' style='margin-right:20px;'>Input Command</button></td></tr></table",
 				subGridBeforeExpand: function(subgrid_id, row_id) {
 					
 				},
@@ -133,10 +137,16 @@
 		}
 		
 		function showInputCommandPanel(id, macAddress) {
+			
+			$("#cmdinput").val("");			
 			$("#cmdinputId").val(id);
 			$("#cmdinputMacAddress").val(macAddress);
-			$("#cmdinput").val("");
 			jQuery("#hostCommandsTable").setSelection(id);
+			if (id == undefined) {
+				isBatchInputCommand = true;
+			} else {
+				isBatchInputCommand = false;
+			}
 			
 			popCenterWindow();
 		}
@@ -155,7 +165,7 @@
 	            complete :function() {
 	            },
 	            success: function(hostInfoArray){
-					$.each(hostInfoArray, function(i, hostInfo){  
+					$.each(hostInfoArray, function(i, hostInfo){   
 						
 						if (jQuery.inArray(hostInfo.id, ids)) {
 							hostGrid.setRowData(hostInfo.id, hostInfo);
@@ -170,30 +180,36 @@
     	
     	function runCommand() {
 			var commandInputStr = $("#cmdinput").val();
-			var macAddress = $("#cmdinputMacAddress").val();
-			var selRowId = $("#hostCommandsTable").jqGrid('getGridParam', 'selrow');
-			
 			if (commandInputStr != '' && macAddress != '') {
-			
-				$.ajax({
-					type: "POST",
-					url: "/monitorserver/services/command/userCommandService/create",
-					data: JSON.stringify({hostMacAddress:macAddress,commandStr:commandInputStr,status:"Created"}),
-					contentType: "application/json; charset=utf-8",
-					dataType: "json",
-					success: function(data){
-						if (selRowId == $("#hostCommandsTable").jqGrid('getGridParam', 'selrow')) {
-							$("#hostCommandsTable").toggleSubGridRow(selRowId);
-							$("#hostCommandsTable").expandSubGridRow(selRowId);
+				if (isBatchInputCommand == false) {
+					var macAddress = $("#cmdinputMacAddress").val();
+					var selRowId = $("#hostCommandsTable").jqGrid('getGridParam', 'selrow');					
+					$.ajax({
+						type: "POST",
+						url: "/monitorserver/services/command/userCommandService/create",
+						data: JSON.stringify({hostMacAddress:macAddress,commandStr:commandInputStr,status:"Created"}),
+						contentType: "application/json; charset=utf-8",
+						dataType: "json",
+						success: function(data){
+							if (selRowId == $("#hostCommandsTable").jqGrid('getGridParam', 'selrow')) {
+								$("#hostCommandsTable").toggleSubGridRow(selRowId);
+								$("#hostCommandsTable").expandSubGridRow(selRowId);
+							}
+						},
+						failure: function(errMsg) {
+							
 						}
-					},
-					failure: function(errMsg) {
-						
-					}
-				});			
-			}  
+					});	
+					closePopWindowManual();	
+					
+				} else {
+					runCommandForMultipleHost(commandInputStr);
+				}
+			} else {
+				closePopWindowManual();		
+			}
 			
-			closePopWindowManual();	
+			
     	}
     	
     	function refreshCommand() {
@@ -233,11 +249,13 @@
 		<div class="content">		
 			<input type='hidden' id='cmdinputId'/>
 			<input type='hidden' id='cmdinputMacAddress'/>
-			<table style="">
+			<table id="commandInputTable">
 				<tr>
 					<td width="40%">Command Input: </td>
-					<td><input type='text' id='cmdinput' style='width:200' /></td>
+					<td colspan="2"><input type='text' id='cmdinput' style='width:200' /></td>
 				</tr>
+			</table>
+			<table>
 				<tr>
 					<td style="text-align:right"><button id='cmdInputBtn' type='button' onclick='runCommand()'>Run Command</button></td>
 					<td><button id='closeBtn' class="close" type='button'>Close</button></td>

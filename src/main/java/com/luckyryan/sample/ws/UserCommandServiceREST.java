@@ -40,6 +40,10 @@ public interface UserCommandServiceREST {
 	@Path("/allcommand/{macAddress}")
 	public List<UserCommandDTO> getAll(@PathParam("macAddress")String macAddress);
 
-	
+	@GET
+	@Consumes("application/json")
+	@Produces("application/json")
+	@Path("/findByIds/{ids}")
+	public List<UserCommandDTO> findByIds(@PathParam("ids")String ids);
 
 }
