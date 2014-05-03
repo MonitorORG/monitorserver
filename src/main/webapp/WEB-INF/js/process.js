@@ -1,7 +1,7 @@
 function addProcessBtnClick() {
 	var newProcessInput = $("#processInput").val();
 	if (newProcessInput != "") {
-		$("#processListTable").append("<tr class='processtr'><td>" + newProcessInput + "</td><td><button onclick='delProcessRow(this)'>Del</button></td></tr>");
+		$("#processListTable").append("<tr class='processtr'><td>" + newProcessInput + "</td><td><button onclick='delProcessRow(this)'>"+$.i18n.prop('del.btn')+"</button></td></tr>");
 		
 		var processlist = $("#processListStr").val();
 		processlist = processlist + "#" + newProcessInput + "|";
@@ -58,7 +58,7 @@ function showInputProcessPanel(id, macAddress) {
 		$(".processtr").remove();				
 		jQuery("#hostCommandsTable").setSelection(id);					
 		var processlist = $("#hostCommandsTable").getCell(id, 'processList');
-		$("#processListTable").append(processlist.replace(/\#/g, "<tr class='processtr'><td>").replace(/\|/g, "</td><td><button onclick='delProcessRow(this)'>Del</button></td></tr>"));
+		$("#processListTable").append(processlist.replace(/\#/g, "<tr class='processtr'><td>").replace(/\|/g, "</td><td><button onclick='delProcessRow(this)'>"+$.i18n.prop('del.btn')+"</button></td></tr>"));
 		$("#processListStr").val(processlist);
 	}
 	popProcessWindow();
@@ -70,7 +70,7 @@ function processStatusFormatter(cellvalue, options, rowdata) {
 }
 
 function processCmdFormatter(cellvalue, options, rowdata) {
-	return "<button type='button' onclick='showInputProcessPanel(\"" + rowdata.id + "\", \"" + rowdata.macAddress + "\")'>Process Manage</button>";
+	return "<button type='button' onclick='showInputProcessPanel(\"" + rowdata.id + "\", \"" + rowdata.macAddress + "\")'>"+$.i18n.prop('process.manage')+"</button>";
 }
 
 function getProcStaTableHtml(id, processStatusStr) {

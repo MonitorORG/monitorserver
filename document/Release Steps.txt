@@ -1,5 +1,6 @@
 mvn clean install
 mvn tomcat:redeploy
+mvn clean tomcat:redeploy
 
 
 Release Agent steps:

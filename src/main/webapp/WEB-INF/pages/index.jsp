@@ -4,7 +4,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
 <head>
-    <title>Sample Page</title>
+    <title>Index Page</title>
 	
     <link href='<c:url value="/main/css/ui.jqgrid.css"/>' type="text/css" rel="stylesheet"></link>
 	<link href='<c:url value="/main/css/jquery.ui.theme.css"/>' type="text/css" rel="stylesheet"></link>
@@ -15,31 +15,49 @@
 	<script type="text/javascript" src='<c:url value="/main/js/jquery.jqGrid.min.js"></c:url>'></script>
 	
 	<script type="text/javascript" src='<c:url value="/main/js/i18n/grid.locale-en.js"></c:url>'></script>
+	<script type="text/javascript" src='<c:url value="/main/js/i18n/grid.locale-cn.js"></c:url>'></script>
 	<script type="text/javascript" src='<c:url value="/main/js/grid.subgrid.js"></c:url>'></script>
 	
 	<script src="js/window.js" type="text/javascript"></script>
 	<script src="js/process.js" type="text/javascript"></script>
 	<script src="js/selectcol.js" type="text/javascript"></script>
+	<script src="js/i18n/jquery.i18n.properties-1.0.9.js" type="text/javascript"></script>
+	<script src="js/i18n/i18n_load.js" type="text/javascript"></script>
 	
     <script type="text/javascript">
 	
 		var isBatchInputCommand = false;
     
     	$(document).ready(function(){
+    		
+    		// I18n initlize
+    		loadProperties();
+    		
+    		document.title=$.i18n.prop('index.title'); 
+    		$(".window #title").html($.i18n.prop('run.command.title'));
+        	$("#commandInputLabel").html($.i18n.prop('command.input.label') + ": ");
+        	$("#cmdInputBtn").html($.i18n.prop('run.command.btn'));
+        	$("#closeBtn").html($.i18n.prop('close'));
+        	
+        	$("#processWindow #title").html($.i18n.prop('process.management.title'));
+        	$("#addProcessBtn").html($.i18n.prop('add.btn'));
+        	$("#submitProcessBtn").html($.i18n.prop('commit.btn'));
+        	$("#closeProcessBtn").html($.i18n.prop('close'));
+        	$("#downloadAgentBtn").html($.i18n.prop('download.agent.label'));
 		
 			$("#hostCommandsTable").jqGrid({
     			url:'/monitorserver/services/hostInfo/hostStatusInfoService/allHost/1',
     			datatype: "json",
     			height: 450,
-    			colNames:['Process List', 'Free Mem', 'ID', 'Host Name','Mac Address', 'CPU Used', 'Mem Used', 'Process Status', 'Process Manage', 'Command', '<input class="gridparentcheckbox" onclick="clickGridParentCheckbox(this, event)" type="checkbox" />'], 
+    			colNames:['Process List', 'Free Mem', 'ID', $.i18n.prop('hostname'), $.i18n.prop('mac.address'), $.i18n.prop('cpu.used'), $.i18n.prop('mem.used'), $.i18n.prop('process.status'), $.i18n.prop('process.manage'), $.i18n.prop('command.execute'), '<input class="gridparentcheckbox" onclick="clickGridParentCheckbox(this, event)" type="checkbox" />'], 
 				colModel:[ 
 					{name:'processList',index:'processList', hidden:true},
 					{name:'freeMem',index:'freeMem', hidden:true},
 					{name:'id',index:'id', width:40, sorttype:"int"}, 
 					{name:'hostname',index:'hostname', width:150}, 
 					{name:'macAddress',index:'macAddress', width:150}, 
-					{name:'cpuTotalUsed',index:'cpuTotalUsed', width:80, formatter: cpuUsedFormatter },
-					{name:'totalMem',index:'totalMem', width:80, formatter: memUsedFormatter }, 
+					{name:'cpuTotalUsed',index:'cpuTotalUsed', width:90, formatter: cpuUsedFormatter },
+					{name:'totalMem',index:'totalMem', width:90, formatter: memUsedFormatter }, 
 					{name:'processStatusResults',index:'processStatusResults', width:200, align: 'center', formatter: processStatusFormatter},
 					{name:'processCmd',index:'processCmd', width:200, align: 'center', formatter: processCmdFormatter},
 					{name:'commandCol',index:'commandCol', width:200, align: 'center', formatter: commandColFormatter},
@@ -58,7 +76,7 @@
 				onSelectRow: function(id){ 				
 				},
     			subGrid: true,
-    			caption: "<table width='100%'><tr><td><b>Host Commands</b></td><td>&nbsp;</td><td style='text-align:right'><button type='button' onclick='showInputCommandPanel(undefined, undefined)' style='margin-right:20px;'>Input Command</button></td></tr></table",
+    			caption: "<table width='100%'><tr><td><b>"+$.i18n.prop('host.commands')+"</b></td><td>&nbsp;</td><td style='text-align:right'><button type='button' onclick='showInputCommandPanel(undefined, undefined)' style='margin-right:20px;'>"+$.i18n.prop('command.input')+"</button></td></tr></table",
 				subGridBeforeExpand: function(subgrid_id, row_id) {
 					
 				},
@@ -80,13 +98,13 @@
 	    			jQuery("#"+subgrid_table_id).jqGrid({
 		    			url:"/monitorserver/services/command/userCommandService/allcommand/"+hostMacAddress,
 		    			datatype: "json",
-		    			colNames:['ID', 'Mac Address', 'Command Str', 'Status', 'Result Show'], 
+		    			colNames:['ID', $.i18n.prop('mac.address'), $.i18n.prop('command.content'), $.i18n.prop('status'), $.i18n.prop('command.result')], 
 						colModel:[ 
 							{name:'id',index:'id', width:40, sorttype:"int"}, 
 							{name:'hostMacAddress',index:'hostMacAddress', width:150}, 
 							{name:'commandStr',index:'commandStr', width:200 },
 							{name:'status',index:'status', width:80 }, 
-							{name:'resultShow',index:'resultShow', width:100, align: 'center', formatter: resultShowFormatter}
+							{name:'resultShow',index:'resultShow', width:110, align: 'center', formatter: resultShowFormatter}
 						], 
 		    			rowNum:20,
 		    			pager: pager_id,
@@ -133,7 +151,7 @@
 		}
 		
 		function commandColFormatter(cellvalue, options, rowdata) {
-			return "<button type='button' onclick='showInputCommandPanel(\"" + rowdata.id + "\", \"" + rowdata.macAddress + "\")'>Input Command</button>";
+			return "<button type='button' onclick='showInputCommandPanel(\"" + rowdata.id + "\", \"" + rowdata.macAddress + "\")'>"+$.i18n.prop('command.input')+"</button>";
 		}
 		
 		function showInputCommandPanel(id, macAddress) {
@@ -152,7 +170,7 @@
 		}
 		
 		function resultShowFormatter(cellvalue, options, rowdata) {
-			return "<span id='commandResultStr" + rowdata.id + "' title='" + rowdata.resultStr + "'>Result</span>";
+			return "<span id='commandResultStr" + rowdata.id + "' title='" + rowdata.resultStr + "'>"+$.i18n.prop('result')+"</span>";
 		}
     	
     	function refreshAllHost() {
@@ -251,7 +269,7 @@
 			<input type='hidden' id='cmdinputMacAddress'/>
 			<table id="commandInputTable">
 				<tr>
-					<td width="40%">Command Input: </td>
+					<td id="commandInputLabel" width="40%">Command Input: </td>
 					<td colspan="2"><input type='text' id='cmdinput' style='width:200' /></td>
 				</tr>
 			</table>
@@ -286,7 +304,7 @@
 	</div>
 	
 	<div style="text-align:right;margin-right:10px;">
-		<a href="agent-download" target="blank"><button>Download Agent 1.0</button></a>
+		<a href="agent-download" target="blank"><button id="downloadAgentBtn">Download Agent</button></a>
 	</div>  
 	
 	<table id="hostCommandsTable"></table>

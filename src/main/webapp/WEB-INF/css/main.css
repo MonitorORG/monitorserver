@@ -52,6 +52,6 @@
 
 .executing {
 	background: url(../image/loding.gif) no-repeat left;
-	width: 150px;
+	width: 50px;
 	display: block;
 }
