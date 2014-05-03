@@ -36,7 +36,7 @@
         <jdbc.database.name>sample_monitor</jdbc.database.name>
         <jdbc.database.server>192.168.11.22</jdbc.database.server>
         <jdbc.url>
-            <![CDATA[jdbc:postgresql://192.168.11.22:5432/${jdbc.database.name}?autoReconnect=true&amp;createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8]]>
+            <![CDATA[jdbc:postgresql://${jdbc.database.server}:5432/${jdbc.database.name}?autoReconnect=true&amp;createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8]]>
         </jdbc.url>
 
     </properties>
@@ -303,6 +303,25 @@
         </resources>
         
         <plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			
+			<plugin>  
+				<groupId>org.codehaus.mojo</groupId>  
+				<artifactId>tomcat-maven-plugin</artifactId>  
+				<configuration>  
+					<url>http://localhost:8080/manager/text</url>  
+					<username>admin</username>  
+					<password>admin</password>  
+					<path>/monitorserver</path>  
+				</configuration>  
+		   </plugin>  
         <!-- 
 	  		<plugin>
 	  			<groupId>org.apache.tomcat.maven</groupId>
@@ -327,6 +346,7 @@
 					</execution>
 				</executions>
 	       	</plugin> -->
-  		</plugins>  
+  		</plugins>
+		<finalName>monitorserver</finalName>		
     </build>
 </project>

@@ -1,35 +1,36 @@
+mvn clean install
+mvn tomcat:redeploy
+
+
+Release Agent steps:
+
+1. mvn clean install
+2. Copy and replace Agent.jar to /Agent
+3. Edit the new monitoragent/Agent/Agent.jar, replace monitoragent/Agent/Agent.jar/META-INF/MANIFEST.MF by monitoragent/Agent/MANIFEST.MF, then save
+4. Zip monitoragent/Agent file to Agent.zip
+5. Copy Agent.zip file to /downloadagent/Agent.zip
+
+Release Server steps:
+1. Change DB link in pom.xml
+	- jdbc.database.server	192.168.11.22
+2. Change monitorserver\src\main\resources\constantsutil.properties
+	- agent.download.path=E:/monitorworkspace/HostAgent/downloadagent/Agent.zip	(需指向正确的Agent.zip包的路径)
+	- agent.download.filename=Agent.zip
+3. mvn clean install
+4. mvn tomcat:redeploy
+
+
+备忘录:
 -properties.properties
 http://staging.marketboomer.cn:18080/monitorserver/main/index
 
 -db.properties
 jdbc.url=jdbc:postgresql://192.168.11.22:5432/sample_monitor?autoReconnect=true&amp;createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8
-
 jdbc.username=postgres
-
 jdbc.password=whitedove
 
 -constantsutil.properties
-agent.download.path=E:/monitorserverworkspace/agent/Agent.zip
+agent.download.path=D:/littleworks/junworkspace/monitoragent/downloadagent/Agent.zip
 agent.download.filename=Agent.zip
 
 
-
-
-
-Release Server steps:
-
-1. Package war file
-2. Change /MonitorServer-1.0.war/WEB-INF/classes/db.properties	(DONE)
-3. Change /MonitorServer-1.0.war/WEB-INF/classes/constantsutil.properties
-4. Change /MonitorServer-1.0.war/WEB-INF/pages/index.jsp	(DONE)
-	- replace "/MonitorServer-1.0" "/monitorserver"		(DONE)
-5. change the war file name to monitorserver
-
-
-Release Agent steps:
-
-1. Package Agent, and copy Agent.jar to /Agent
-2. Replace /Agent/Agent.jar/META-INF/MANIFEST.MF by MANIFEST.MF
-3. Changed /Agent/properties.properties	(DONE)
-4. Zip /Agent file to Agent.zip
-5. Copy Agent.zip file to /downloadagent/Agent.zip
