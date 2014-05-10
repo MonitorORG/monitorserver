@@ -10,6 +10,7 @@ public class HostStatusInfoDTO {
 	private double freeMem;
 	
 	private String macAddress;
+	private String status;
 
 	private String createDate;
 	private String updateDate;
@@ -100,6 +101,12 @@ public class HostStatusInfoDTO {
 	}
 	public void setIsAgentCommited(boolean isAgentCommited) {
 		this.isAgentCommited = isAgentCommited;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}	
 	
 }

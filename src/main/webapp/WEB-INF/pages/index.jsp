@@ -49,7 +49,7 @@
     			url:'/monitorserver/services/hostInfo/hostStatusInfoService/allHost/1',
     			datatype: "json",
     			height: 450,
-    			colNames:['Process List', 'Free Mem', 'ID', $.i18n.prop('hostname'), $.i18n.prop('mac.address'), $.i18n.prop('cpu.used'), $.i18n.prop('mem.used'), $.i18n.prop('process.status'), $.i18n.prop('process.manage'), $.i18n.prop('command.execute'), '<input class="gridparentcheckbox" onclick="clickGridParentCheckbox(this, event)" type="checkbox" />'], 
+    			colNames:['Process List', 'Free Mem', 'ID', $.i18n.prop('hostname'), $.i18n.prop('mac.address'), $.i18n.prop('cpu.used'), $.i18n.prop('mem.used'), $.i18n.prop('host.status'), $.i18n.prop('process.status'), $.i18n.prop('process.manage'), $.i18n.prop('command.execute'), '<input class="gridparentcheckbox" onclick="clickGridParentCheckbox(this, event)" type="checkbox" />'], 
 				colModel:[ 
 					{name:'processList',index:'processList', hidden:true},
 					{name:'freeMem',index:'freeMem', hidden:true},
@@ -58,7 +58,7 @@
 					{name:'macAddress',index:'macAddress', width:150}, 
 					{name:'cpuTotalUsed',index:'cpuTotalUsed', width:90, formatter: cpuUsedFormatter },
 					{name:'totalMem',index:'totalMem', width:90, formatter: memUsedFormatter }, 
-					{name:'status',index:'status', width:80, formatter: hostStatusFormatter }, 
+					{name:'status',index:'status', width:80, align: 'center', formatter: hostStatusFormatter }, 
 					{name:'processStatusResults',index:'processStatusResults', width:200, align: 'center', formatter: processStatusFormatter},
 					{name:'processCmd',index:'processCmd', width:200, align: 'center', formatter: processCmdFormatter},
 					{name:'commandCol',index:'commandCol', width:200, align: 'center', formatter: commandColFormatter},
@@ -158,8 +158,9 @@
 		function hostStatusFormatter(cellvalue, options, rowdata) {
 			var status = rowdata.status;
 			if (status == null) status = "";
-			return "<div class='hostStatus'>" + status.replace("uninitial", "<span class='wait'>&nbsp;&nbsp;&nbsp;&nbsp;</span>").replace("running", "<span class='running'>&nbsp;&nbsp;&nbsp;&nbsp;</span>").replace("unconnected", "<span class='stop'>&nbsp;&nbsp;&nbsp;&nbsp;</span>") + 
-			"</div>";
+			return status.replace("uninitial", "<span class='wait' title='" + $.i18n.prop('status.uninitial') + "'>&nbsp; &nbsp; </span>")
+				.replace("running", "<span class='running' title='" + $.i18n.prop('status.running') + "'>&nbsp; &nbsp; </span>")
+				.replace("unconnected", "<span class='stop' title='" + $.i18n.prop('status.unconnected') + "'>&nbsp; &nbsp; </span>");
 		}
 		
 		function showInputCommandPanel(id, macAddress) {

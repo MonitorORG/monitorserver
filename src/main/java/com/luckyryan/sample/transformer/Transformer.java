@@ -46,6 +46,7 @@ public class Transformer {
     	dto.setMacAddress(info.getMacAddress());
     	dto.setProcessList(info.getProcessList());
     	dto.setProcessStatusResults(info.getProcessStatusResults());
+    	dto.setStatus(info.getStatus());
     	
     	java.text.DateFormat format = new java.text.SimpleDateFormat("yyyyMMddhhmmss");  
     	if (info.getCreateDate() != null) {
@@ -79,6 +80,7 @@ public class Transformer {
         	dto.setCpuTotalUsed(info.getCpuTotalUsed());
         	dto.setCpuCount(info.getCpuCount());
         	dto.setMacAddress(info.getMacAddress());
+        	dto.setStatus(info.getStatus());
         	
         	dto.setProcessList(info.getProcessList());
         	dto.setProcessStatusResults(info.getProcessStatusResults());

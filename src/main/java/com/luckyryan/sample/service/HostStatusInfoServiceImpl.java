@@ -95,6 +95,7 @@ public class HostStatusInfoServiceImpl implements HostStatusInfoService {
 		} else {	 
 			// 2. New host status
 			
+			updateHost = new HostStatusInfo();			
 			if (pushedHost.getIsAgentCommited() != null && pushedHost.getIsAgentCommited()) {
 				// 2.1 pushed by host agent				
 				updateHost.setMacAddress(pushedHost.getMacAddress());
