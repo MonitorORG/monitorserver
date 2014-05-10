@@ -152,7 +152,8 @@
 		}
 		
 		function commandColFormatter(cellvalue, options, rowdata) {
-			return "<button type='button' onclick='showInputCommandPanel(\"" + rowdata.id + "\", \"" + rowdata.macAddress + "\")'>"+$.i18n.prop('command.input')+"</button>";
+			return "<button type='button' onclick='showInputCommandPanel(\"" + rowdata.id + "\", \"" + rowdata.macAddress + "\")'>"+$.i18n.prop('command.input')+"</button>" + 
+				   "<button type='button' onclick='showDelConfirmPanel(\"" + rowdata.id + "\", \"" + rowdata.macAddress + "\")'>"+$.i18n.prop('command.delete')+"</button>";
 		}
 		
 		function hostStatusFormatter(cellvalue, options, rowdata) {
@@ -161,6 +162,30 @@
 			return status.replace("uninitial", "<span class='wait' title='" + $.i18n.prop('status.uninitial') + "'>&nbsp; &nbsp; </span>")
 				.replace("running", "<span class='running' title='" + $.i18n.prop('status.running') + "'>&nbsp; &nbsp; </span>")
 				.replace("unconnected", "<span class='stop' title='" + $.i18n.prop('status.unconnected') + "'>&nbsp; &nbsp; </span>");
+		}
+		
+		function showDelConfirmPanel(id, macAddress) {
+			
+			$("#delHostId").val(id);
+			$("#deleteMessage").text("Are you sure to delete this host with Mac Address '" + macAddress + "'?");
+			popDelConfirmWindow();			
+		}
+		
+		function deleteHostInfo() {
+			var hostGrid = jQuery("#hostCommandsTable");
+			var hostId = $("#delHostId").val();
+    		$.ajax({
+	            type: "get",
+	            dataType: "json",
+	            url: "/monitorserver/services/hostInfo/hostStatusInfoService/delHost/" + hostId,
+	            complete :function(msg) {
+	            	hostGrid.trigger('reloadGrid');
+	            	closeDelConfirmPopWindowManual();
+	            },
+	            success: function(msg){
+	            	hostGrid.trigger('reloadGrid');
+	            	closeDelConfirmPopWindowManual();
+	            }});
 		}
 		
 		function showInputCommandPanel(id, macAddress) {
@@ -270,7 +295,8 @@
     </script>
 </head>
 <body>
-
+	
+	<!-- 命令运行窗口 -->
 	<div class="window" id="center" style="z-index:999"> 
 		<div id="title" class="title">Run Command Window</div> 
 		<div class="content">		
@@ -291,6 +317,22 @@
 		</div> 
 	</div> 
 	
+	<!-- 删除确认窗口 -->
+	<div id="delConfirmWindow" style="z-index:999;display:none;">
+		<div id="title" class="title">Delete Window</div> 
+		<div class="content">		
+			<input type='hidden' id='delHostId'/>
+			<span id="deleteMessage">&nbsp;</span>
+			<table>
+				<tr>
+					<td style="text-align:right"><button id='okConfigmBtn' type='button' onclick='deleteHostInfo()'>OK</button></td>
+					<td><button id='cancelConfirmBtn' class="close" type='button'>Cancel</button></td>
+				</tr>
+			</table>
+		</div> 
+	</div> 
+	
+	<!-- 进程管理窗口 -->
 	<div id="processWindow" style="z-index:999;display:none;">
 		<div id="title" class="title">Process Management Window</div>
 		<div class="content">

@@ -10,9 +10,8 @@ public class AgentStatusJob {
 	@Autowired
 	private HostStatusInfoServiceImpl hostService;
 	
-	public void work() {  
-        System.out.println("Starting job");           
-        System.out.println("hostService: " + hostService);
+	public void work() {
+        System.out.println("Starting job");
         
         hostService.updateDisconnectedHostStatus(HostStatus.UNCONNECTED);
     }  

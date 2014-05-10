@@ -13,4 +13,5 @@ public interface HostStatusInfoService {
 	public List<HostStatusInfo> getAll(Long userId) throws InvalidUserException;
 	
 	public int updateDisconnectedHostStatus(String newStatus)  throws InvalidUserException;
+	public String deleteHostInfo(Long hostId)  throws InvalidUserException;
 }

@@ -41,7 +41,7 @@ function popCenterWindow(){
 	closePopWindow(); 
 } 
 
-// ---------------
+// -----Process Management dialog----------
 function closeProcessPopWindowManual() {	
 	$("#processWindow").hide("slow"); 	
 }
@@ -56,3 +56,24 @@ function popProcessWindow(){
 		$("#processWindow").hide("slow");
 	});
 } 
+
+//-----Delete Host Confirm dialog----------
+function closeDelConfirmPopWindowManual() {	
+	$("#delConfirmWindow").hide("slow"); 	
+}
+
+function popDelConfirmWindow(){ 
+	init(); 
+	var popY=windowHeight/2 - 200; 
+	var popX=windowWidth/2; 
+	$("#delConfirmWindow").css("top",popY).css("left",popX).slideToggle("slow");  
+	
+	$("#cancelConfirmBtn").click(function() {
+		closeDelConfirmPopWindowManual();
+	});
+} 
+
+
+
+
+

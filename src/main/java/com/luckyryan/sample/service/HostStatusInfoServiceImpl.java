@@ -12,8 +12,9 @@ import com.luckyryan.sample.exception.InvalidUserException;
 import com.socket.server.util.HostStatus;
 import com.socket.server.util.ProcessStatus;
 import com.socket.server.util.StringUtil;
+
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.annotation.Propagation;
+//import org.springframework.transaction.annotation.Propagation;
 
 @Service("hostStatusInfoService")
 public class HostStatusInfoServiceImpl implements HostStatusInfoService {
@@ -194,5 +195,15 @@ public class HostStatusInfoServiceImpl implements HostStatusInfoService {
 	public int updateDisconnectedHostStatus(String newStatus)  throws InvalidUserException {
 		
 		return dao.updateDisconnectedHostStatus(newStatus);
+	}
+
+	@Override
+	public String deleteHostInfo(Long hostId) throws InvalidUserException {
+		try {
+			dao.delete(hostId);
+		} catch (Exception e) {
+			return "Error: " + e.getMessage();
+		}
+		return "Success";
 	}
 }

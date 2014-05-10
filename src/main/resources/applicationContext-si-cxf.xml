@@ -12,6 +12,7 @@
     	<int:method name="getInfo" request-channel="getInfoFormChannelREST" />		 
     	<int:method name="saveInfo" request-channel="saveInfoFormChannelREST" />
     	<int:method name="getAll" request-channel="allInfoFormChannelREST" />    	
+    	<int:method name="deleteHost" request-channel="delInfoFormChannelREST" />    	
     	
     </int:gateway>
     
@@ -31,6 +32,7 @@
     <int:channel id="getInfoFormChannelREST" />
     <int:channel id="saveInfoFormChannelREST" />
     <int:channel id="allInfoFormChannelREST" />
+    <int:channel id="delInfoFormChannelREST" />
     
     <int:channel id="saveCommandFormChannelREST" />
     <int:channel id="getCommandChannelREST" />
@@ -53,6 +55,11 @@
     	<int:transformer ref="transformer" method="stringToLong" />
     	<int:service-activator ref="hostStatusInfoService" method="getAll" />
     	<int:transformer ref="transformer" method="hostInfoListToDtoList" />
+    </int:chain>
+    <int:chain input-channel="delInfoFormChannelREST">
+    	<int:transformer ref="transformer" method="stringToLong" />
+    	<int:service-activator ref="hostStatusInfoService" method="deleteHostInfo" />
+    	<int:transformer ref="transformer" method="stringToStr" />
     </int:chain>
     
     <!-- User Command -->

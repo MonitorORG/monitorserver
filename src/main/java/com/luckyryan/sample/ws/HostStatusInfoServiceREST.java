@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -33,4 +34,10 @@ public interface HostStatusInfoServiceREST {
 	@Produces("application/json")
 	@Path("/allHost/{userId}")
 	public List<HostStatusInfoDTO> getAll(@PathParam("userId") String userId);
+	
+	@GET
+	@Consumes("application/json")
+	@Produces("application/json")
+	@Path("/delHost/{hostId}")
+	public String deleteHost(@PathParam("hostId") String hostId);
 }

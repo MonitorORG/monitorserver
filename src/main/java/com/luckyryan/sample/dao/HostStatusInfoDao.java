@@ -18,6 +18,6 @@ public interface HostStatusInfoDao extends CrudRepository<HostStatusInfo,Long> {
 	public List<HostStatusInfo> getAll() throws InvalidUserException;
 	
 	@Modifying
-	@Query("update HostStatusInfo h set h.status = :newStatus where (now()-h.updateDate) > '10 seconds'")
+	@Query("update HostStatusInfo h set h.status = :newStatus, h.processStatusResults = replace(h.processStatusResults, '*1', '*2') where (now()-h.updateDate) > '10 seconds'")
 	public int updateDisconnectedHostStatus(@Param("newStatus") String newStatus);
 }
