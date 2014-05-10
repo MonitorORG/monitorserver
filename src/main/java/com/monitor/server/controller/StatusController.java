@@ -1,4 +1,4 @@
-package com.luckyryan.sample.webapp.controller;
+package com.monitor.server.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -3,6 +3,7 @@ package com.luckyryan.sample.dao;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
@@ -15,4 +16,8 @@ public interface HostStatusInfoDao extends CrudRepository<HostStatusInfo,Long> {
 	
 	@Query("select h from HostStatusInfo h order by h.id desc")  
 	public List<HostStatusInfo> getAll() throws InvalidUserException;
+	
+	@Modifying
+	@Query("update HostStatusInfo h set h.status = :newStatus where (now()-h.updateDate) > '10 seconds'")
+	public int updateDisconnectedHostStatus(@Param("newStatus") String newStatus);
 }

@@ -9,8 +9,11 @@ import org.springframework.stereotype.Service;
 import com.luckyryan.sample.dao.HostStatusInfoDao;
 import com.luckyryan.sample.dao.model.HostStatusInfo;
 import com.luckyryan.sample.exception.InvalidUserException;
+import com.socket.server.util.HostStatus;
 import com.socket.server.util.ProcessStatus;
 import com.socket.server.util.StringUtil;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Propagation;
 
 @Service("hostStatusInfoService")
 public class HostStatusInfoServiceImpl implements HostStatusInfoService {
@@ -18,90 +21,154 @@ public class HostStatusInfoServiceImpl implements HostStatusInfoService {
 	@Autowired
 	private HostStatusInfoDao dao;
 	
-	public HostStatusInfo saveInfo(HostStatusInfo info)
+	public HostStatusInfo saveInfo(HostStatusInfo pushedHost)
 			throws InvalidUserException {
 		
-		if(info == null) {
+		if(pushedHost == null) {
             throw new InvalidUserException("Sorry Dave");
         }
 		
-		HostStatusInfo orginal = dao.getHostByMacAddress(info.getMacAddress());
-		if (orginal != null && orginal.getId() != null) {	
-			// Edit
-			info.setId(orginal.getId());
-			info.setCreateDate(orginal.getCreateDate());
-			info.setUpdateDate(new Date());
+		HostStatusInfo updateHost = dao.getHostByMacAddress(pushedHost.getMacAddress());
+		
+		if (updateHost != null && updateHost.getId() != null) {	
+			// 1. Edit host status
 			
-			if (info.getIsAgentCommited() != null && info.getIsAgentCommited()) {
-				// don't update process list
-				boolean isProcessListChanged = !StringUtil.isEquals(info.getProcessList(), orginal.getProcessList());
-				info.setProcessList(orginal.getProcessList());
+			if (pushedHost.getIsAgentCommited() != null && pushedHost.getIsAgentCommited()) {
+				// 1.1 pushed by host agent
+				// mac address should not be changed
+//				updateHost.setMacAddress(pushedHost.getMacAddress());
 				
-				if (isProcessListChanged) {
-					// don't update process status
-					info.setProcessStatusResults(orginal.getProcessStatusResults());
+				updateHost.setHostname(pushedHost.getHostname());
+				updateHost.setTotalMem(pushedHost.getTotalMem());
+				updateHost.setFreeMem(pushedHost.getFreeMem());
+				updateHost.setCpuTotalUsed(pushedHost.getCpuTotalUsed());
+				updateHost.setCpuCount(pushedHost.getCpuCount());
+				
+				// process list should not be changed by agent
+//				updateHost.setProcessList(pushedHost.getProcessList());				
+				boolean isProcessListNotChanged = StringUtil.isEquals(pushedHost.getProcessList(), updateHost.getProcessList());
+				if (isProcessListNotChanged) {
+					// process status only changed when process list is not changed
+					updateHost.setProcessStatusResults(pushedHost.getProcessStatusResults());
 				}
+				updateHost.setStatus(HostStatus.RUNNING);
+				// set user id
+				// set enable & disable
+				
+//				updateHost.setCreateDate(new Date());
+				updateHost.setUpdateDate(new Date());
+				
 			} else {
-				orginal.setProcessList(info.getProcessList());
-				orginal.setUpdateDate(new Date());
+				// 1.2 pushed by browser
+				// mac address should not be changed
+//				updateHost.setMacAddress(pushedHost.getMacAddress());
+				// monitor info should not be changed by broswer
+//				updateHost.setHostname(pushedHost.getHostname());
+//				updateHost.setTotalMem(pushedHost.getTotalMem());
+//				updateHost.setFreeMem(pushedHost.getFreeMem());
+//				updateHost.setCpuTotalUsed(pushedHost.getCpuTotalUsed());
+//				updateHost.setCpuCount(pushedHost.getCpuCount());
 				
-				StringBuffer initProcStaInfoBuf = new StringBuffer();
-				for (String procName : StringUtil.getProcessArray(info.getProcessList())) {
-					initProcStaInfoBuf.append(ProcessStatus.START_SYMBOL)
-									  .append(ProcessStatus.WAITING)
-									  .append(ProcessStatus.SEP_SYMBOL)
-									  .append(procName)
-									  .append(ProcessStatus.END_SYMBOL);
+				updateHost.setProcessList(pushedHost.getProcessList());
+				boolean isProcessListChanged = !StringUtil.isEquals(pushedHost.getProcessList(), updateHost.getProcessList());
+				if (isProcessListChanged) {
+					// all process status will be reseted when process list is changed
+					StringBuffer initProcStaInfoBuf = new StringBuffer();
+					for (String procName : StringUtil.getProcessArray(pushedHost.getProcessList())) {
+						initProcStaInfoBuf.append(ProcessStatus.START_SYMBOL)
+										  .append(ProcessStatus.WAITING)
+										  .append(ProcessStatus.SEP_SYMBOL)
+										  .append(procName)
+										  .append(ProcessStatus.END_SYMBOL);
+					}
+					updateHost.setProcessStatusResults(initProcStaInfoBuf.toString());
 				}
-				orginal.setProcessStatusResults(initProcStaInfoBuf.toString());
 				
-				info = orginal;
+				updateHost.setStatus(HostStatus.UNINITIAL);
+				// set user id
+				// set enable & disable
+				
+//				updateHost.setCreateDate(new Date());
+				updateHost.setUpdateDate(new Date());
 			}
 			
-//			if (!StringUtil.isEmpty(info.getProcessList())) {
-//				if (info.getIsAgentCommited() != null && info.getIsAgentCommited()) {	
-//					// send by agent, if process list matched, then update process status, else dont change the list and status					
-//					if (info.getProcessList().equals(orginal.getProcessList())) {
-//						// the updated process status info is send by agent
-//					} else {
-//						info.setProcessList(orginal.getProcessList());
-//						info.setProcessStatusResults(orginal.getProcessStatusResults());
-//					}
-//					
-//				} else {  
-//					// send by broswer, only update process list, and update status list (only add or del)
-//					orginal.setProcessList(info.getProcessList());
-//					orginal.setUpdateDate(new Date());
-//					
-//					StringBuffer initProcStaInfoBuf = new StringBuffer();
-//					for (String procName : StringUtil.getProcessArray(info.getProcessList())) {
-//						initProcStaInfoBuf.append(ProcessStatus.START_SYMBOL)
-//										  .append(ProcessStatus.STOP)
-//										  .append(ProcessStatus.SEP_SYMBOL)
-//										  .append(procName)
-//										  .append(ProcessStatus.END_SYMBOL);
-//					}
-//					orginal.setProcessStatusResults(initProcStaInfoBuf.toString());
-//					
-//					info = orginal;
-//				}
-//			} else if (!StringUtil.isEmpty(orginal.getProcessList())) {
-//				info.setProcessList(orginal.getProcessList());
-//				info.setProcessStatusResults(orginal.getProcessStatusResults());
-//			}
+		} else {	 
+			// 2. New host status
 			
-		} else {	
-			// Add
-			info.setCreateDate(new Date());
-			info.setUpdateDate(new Date());
-			
-			if (!StringUtil.isEmpty(info.getProcessList())) {
-				// TODO generate status by process list
-				// currently, the process list will always empty in create a new host info
+			if (pushedHost.getIsAgentCommited() != null && pushedHost.getIsAgentCommited()) {
+				// 2.1 pushed by host agent				
+				updateHost.setMacAddress(pushedHost.getMacAddress());
+				
+				updateHost.setHostname(pushedHost.getHostname());
+				updateHost.setTotalMem(pushedHost.getTotalMem());
+				updateHost.setFreeMem(pushedHost.getFreeMem());
+				updateHost.setCpuTotalUsed(pushedHost.getCpuTotalUsed());
+				updateHost.setCpuCount(pushedHost.getCpuCount());
+				
+				updateHost.setProcessList(StringUtil.EMPTY);
+				updateHost.setProcessStatusResults(StringUtil.EMPTY);
+				updateHost.setStatus(HostStatus.UNINITIAL);
+				// set user id
+				// set enable & disable
+				
+				updateHost.setCreateDate(new Date());
+				updateHost.setUpdateDate(new Date());
+				
+			} else {
+				// 2.2 pushed by browser
+				// TODO This is not happened yet
+				throw new InvalidUserException("Sorry Dave");
 			}
 		}
 		
-        return dao.save(info);
+		return dao.save(updateHost);
+		
+		
+//		HostStatusInfo orginalHost = dao.getHostByMacAddress(newHost.getMacAddress());
+//		if (orginalHost != null && orginalHost.getId() != null) {	
+//			// Edit
+//			newHost.setId(orginalHost.getId());
+//			newHost.setCreateDate(orginalHost.getCreateDate());
+//			newHost.setUpdateDate(new Date());
+//			
+//			if (newHost.getIsAgentCommited() != null && newHost.getIsAgentCommited()) {
+//				// don't update process list
+//				boolean isProcessListChanged = !StringUtil.isEquals(newHost.getProcessList(), orginalHost.getProcessList());
+//				newHost.setProcessList(orginalHost.getProcessList());
+//				
+//				if (isProcessListChanged) {
+//					// don't update process status
+//					newHost.setProcessStatusResults(orginalHost.getProcessStatusResults());
+//				}
+//			} else {
+//				orginalHost.setProcessList(newHost.getProcessList());
+//				orginalHost.setUpdateDate(new Date());
+//				
+//				StringBuffer initProcStaInfoBuf = new StringBuffer();
+//				for (String procName : StringUtil.getProcessArray(newHost.getProcessList())) {
+//					initProcStaInfoBuf.append(ProcessStatus.START_SYMBOL)
+//									  .append(ProcessStatus.WAITING)
+//									  .append(ProcessStatus.SEP_SYMBOL)
+//									  .append(procName)
+//									  .append(ProcessStatus.END_SYMBOL);
+//				}
+//				orginalHost.setProcessStatusResults(initProcStaInfoBuf.toString());
+//				
+//				newHost = orginalHost;
+//			}
+//			
+//		} else {	
+//			// Add
+//			newHost.setCreateDate(new Date());
+//			newHost.setUpdateDate(new Date());
+//			
+//			if (!StringUtil.isEmpty(newHost.getProcessList())) {
+//				// TODO generate status by process list
+//				// currently, the process list will always empty in create a new host info
+//			}
+//		}
+//		
+//        return dao.save(newHost);
 	}
 
 	public HostStatusInfo getInfo(Long id) throws InvalidUserException {
@@ -120,5 +187,11 @@ public class HostStatusInfoServiceImpl implements HostStatusInfoService {
 	public List<HostStatusInfo> getAll(Long userId) throws InvalidUserException {
 		
 		return dao.getAll();
+	}
+	
+	@Transactional//(readOnly = false, propagation = Propagation.REQUIRES_NEW)  
+	public int updateDisconnectedHostStatus(String newStatus)  throws InvalidUserException {
+		
+		return dao.updateDisconnectedHostStatus(newStatus);
 	}
 }

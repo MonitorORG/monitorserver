@@ -11,4 +11,6 @@ public interface HostStatusInfoService {
 	public HostStatusInfo getHostByMacAddress(String macAddress) throws InvalidUserException;
 	
 	public List<HostStatusInfo> getAll(Long userId) throws InvalidUserException;
+	
+	public int updateDisconnectedHostStatus(String newStatus)  throws InvalidUserException;
 }

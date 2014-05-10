@@ -58,6 +58,7 @@
 					{name:'macAddress',index:'macAddress', width:150}, 
 					{name:'cpuTotalUsed',index:'cpuTotalUsed', width:90, formatter: cpuUsedFormatter },
 					{name:'totalMem',index:'totalMem', width:90, formatter: memUsedFormatter }, 
+					{name:'status',index:'status', width:80, formatter: hostStatusFormatter }, 
 					{name:'processStatusResults',index:'processStatusResults', width:200, align: 'center', formatter: processStatusFormatter},
 					{name:'processCmd',index:'processCmd', width:200, align: 'center', formatter: processCmdFormatter},
 					{name:'commandCol',index:'commandCol', width:200, align: 'center', formatter: commandColFormatter},
@@ -135,7 +136,7 @@
     		//每10秒执行，无限次，并命名计时器名称为C
     		//若时间间隔抵到，但函式程序仍未完成则需等待执行函式完成后再继续计时
     		//$('body').everyTime('1das','C',function(){
-    		$('body').everyTime('10s','C',function(){
+    		$('body').everyTime('5s','C',function(){
     			//jQuery("#hostCommandsTable").trigger('reloadGrid');
 				refreshAllHost();
 				refreshCommand();
@@ -152,6 +153,13 @@
 		
 		function commandColFormatter(cellvalue, options, rowdata) {
 			return "<button type='button' onclick='showInputCommandPanel(\"" + rowdata.id + "\", \"" + rowdata.macAddress + "\")'>"+$.i18n.prop('command.input')+"</button>";
+		}
+		
+		function hostStatusFormatter(cellvalue, options, rowdata) {
+			var status = rowdata.status;
+			if (status == null) status = "";
+			return "<div class='hostStatus'>" + status.replace("uninitial", "<span class='wait'>&nbsp;&nbsp;&nbsp;&nbsp;</span>").replace("running", "<span class='running'>&nbsp;&nbsp;&nbsp;&nbsp;</span>").replace("unconnected", "<span class='stop'>&nbsp;&nbsp;&nbsp;&nbsp;</span>") + 
+			"</div>";
 		}
 		
 		function showInputCommandPanel(id, macAddress) {

@@ -12,7 +12,7 @@
   
     <mvc:annotation-driven />  
     <context:annotation-config/>
-    <context:component-scan base-package="com.luckyryan.sample"/>
+    <context:component-scan base-package="com.monitor.server.controller"/>
         
     <bean id="viewResolver"  
         class="org.springframework.web.servlet.view.InternalResourceViewResolver"  
