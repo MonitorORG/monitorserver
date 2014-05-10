@@ -303,7 +303,7 @@
         </resources>
         
         <plugins>
-			<plugin>
+		<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<source>1.7</source>
@@ -321,7 +321,7 @@
 					<password>admin</password>  
 					<path>/monitorserver</path>  
 				</configuration>  
-		   </plugin>  
+		   </plugin>
         <!-- 
 	  		<plugin>
 	  			<groupId>org.apache.tomcat.maven</groupId>
