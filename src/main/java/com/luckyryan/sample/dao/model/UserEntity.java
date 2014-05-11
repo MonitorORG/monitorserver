@@ -3,7 +3,6 @@ package com.luckyryan.sample.dao.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Transient;
 
 /**
  * User: ryan
@@ -20,6 +19,11 @@ public class UserEntity {
     private String lastName;
     private String email;
     private String password;
+    private String username;
+    
+    private boolean enable;
+    private String role;
+    private String phone;
 
     
     public String getPassword() {
@@ -61,5 +65,37 @@ public class UserEntity {
     public void setEmail(String email) {
         this.email = email;
     }
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public boolean isEnable() {
+		return enable;
+	}
+
+	public void setEnable(boolean enable) {
+		this.enable = enable;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
 }

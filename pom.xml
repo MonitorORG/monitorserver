@@ -20,7 +20,7 @@
         <hibernate.version>4.1.9.Final</hibernate.version>
         <servlet.version>3.0.1</servlet.version>
         <commons-lang.version>2.6</commons-lang.version>
-        <jackson.version>1.9.0</jackson.version>
+        <jackson.version>1.9.10</jackson.version>
         <cxf.version>2.7.5</cxf.version>
         <jstl.version>1.2</jstl.version>
         <jquery.version>1.9.0</jquery.version>
@@ -34,7 +34,7 @@
         <jdbc.password>whitedove</jdbc.password>
         <jdbc.driverClassName>org.postgresql.Driver</jdbc.driverClassName>
         <jdbc.database.name>sample_monitor</jdbc.database.name>
-        <jdbc.database.server>192.168.11.22</jdbc.database.server>
+        <jdbc.database.server>192.168.1.105</jdbc.database.server>
         <jdbc.url>
             <![CDATA[jdbc:postgresql://${jdbc.database.server}:5432/${jdbc.database.name}?autoReconnect=true&amp;createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8]]>
         </jdbc.url>
@@ -138,6 +138,13 @@
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        
+        <!-- Jackson JSON Mapper -->
+	    <dependency>
+	        <groupId>org.codehaus.jackson</groupId>
+	        <artifactId>jackson-mapper-asl</artifactId>
+	        <version>${jackson.version}</version>
+	    </dependency>
 
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>

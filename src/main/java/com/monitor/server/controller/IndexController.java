@@ -12,7 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * Date: 2/7/13
  */
 @Controller
-public class StatusController {
+public class IndexController {
 
     private final String PAGE_INDEX = "index";
 

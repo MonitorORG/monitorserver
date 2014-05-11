@@ -16,8 +16,10 @@
         
     <bean id="viewResolver"  
         class="org.springframework.web.servlet.view.InternalResourceViewResolver"  
-        p:viewClass="org.springframework.web.servlet.view.JstlView" p:prefix="/WEB-INF/pages/"  
-        p:suffix=".jsp" />    
+        p:viewClass="org.springframework.web.servlet.view.JstlView" 
+        p:prefix="/WEB-INF/pages/"  
+        p:suffix=".jsp" 
+        p:contentType="text/html;charset=utf-8" />    
         
     <!-- <mvc:resources mapping="/resources/**" location="/resources/" /> -->  
     <!-- <mvc:resources mapping="/js/**" location="/resources/js/"/> --> 
