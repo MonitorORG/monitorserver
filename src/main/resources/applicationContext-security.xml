@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd ">
+     
+    <http auto-config="true" use-expressions="false">  
+		<intercept-url pattern="/main/index" access="ROLE_ADMIN,ROLE_USER" />  
+        <intercept-url pattern="/main/command" access="ROLE_ADMIN,ROLE_USER" />  
+        <intercept-url pattern="/main/admin" access="ROLE_ADMIN" />  
+        <anonymous username="guest" granted-authority="ROLE_GUEST" />  
+        
+        <form-login 
+        	login-page="/main/login.html"  
+			login-processing-url="/login" 
+			default-target-url="/main/index"  
+            authentication-failure-url="/main/login.html?error=true" />  
+    	<logout logout-success-url="/main/login.html" /> 
+
+    </http>  
+  
+  	
+    <authentication-manager>  
+        <authentication-provider> 
+        	
+        	<jdbc-user-service id="userService1"
+				data-source-ref="mainDataSource"
+				users-by-username-query="select username, password, 1 from userentity where username=?"
+				authorities-by-username-query="select u.username username, u.role rolename from userentity u where u.username=?" />
+			
+       		<!-- 
+        	<jdbc-user-service id="userService1"
+				data-source-ref="dataSource"
+				users-by-username-query="select logname,password,1 from users where logName=?"
+				authorities-by-username-query="select b.logName username,rolename from users_roles a,users b,roles c where a.userId=b.userId and a.roleId=c.roleId and b.logName=?" />
+			-->
+        	<!-- 
+            <user-service>  
+                <user name="admin" authorities="ROLE_ADMIN,ROLE_USER" password="secret" />  
+                <user name="user1" authorities="ROLE_USER" password="1111" />  
+			</user-service>    
+			-->
+			
+ 			<password-encoder hash="md5" />
+        </authentication-provider> 
+    </authentication-manager>
+ 	
+ 	
+</beans:beans>

@@ -24,6 +24,7 @@
         <cxf.version>2.7.5</cxf.version>
         <jstl.version>1.2</jstl.version>
         <jquery.version>1.9.0</jquery.version>
+        <springsecurity.version>3.1.0.RELEASE</springsecurity.version>
         
         <!-- JDBC Setting -->
         <hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect>
@@ -138,6 +139,36 @@
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        <dependency>  
+	       <groupId>org.springframework.security</groupId>  
+	       <artifactId>spring-security-web</artifactId>  
+	       <version>${springsecurity.version}</version>
+	    </dependency>
+        <dependency>  
+	       <groupId>org.springframework.security</groupId>  
+           <artifactId>spring-security-core</artifactId>  
+	       <version>${springsecurity.version}</version>
+	    </dependency>  
+        <dependency>  
+	       <groupId>org.springframework.security</groupId>  
+           <artifactId>spring-security-config</artifactId>  
+	       <version>${springsecurity.version}</version>
+	    </dependency>  
+        <dependency>  
+	       <groupId>org.springframework.security</groupId>  
+       	   <artifactId>spring-security-taglibs</artifactId>  
+	       <version>${springsecurity.version}</version>
+	    </dependency>  
+        <dependency>  
+	       <groupId>org.springframework.security</groupId>  
+            <artifactId>spring-security-aspects</artifactId> 
+	       <version>${springsecurity.version}</version>
+	    </dependency>    
+        <dependency>  
+	       <groupId>org.springframework.security</groupId>  
+            <artifactId>spring-security-acl</artifactId>   
+	       <version>${springsecurity.version}</version>
+	    </dependency>      
         
         <!-- Jackson JSON Mapper -->
 	    <dependency>

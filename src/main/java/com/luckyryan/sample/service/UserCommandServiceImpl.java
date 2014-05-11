@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.luckyryan.sample.dao.UserCommandDao;
 import com.luckyryan.sample.dao.model.UserCommand;
-import com.luckyryan.sample.exception.InvalidUserException;
+import com.luckyryan.sample.exception.InvalidDataException;
 import com.socket.server.util.StringUtil;
 
 @Service("userCommandService")
@@ -20,19 +20,19 @@ public class UserCommandServiceImpl implements UserCommandService {
 	private UserCommandDao dao;
 	
 	public UserCommand saveCommand(UserCommand command)
-			throws InvalidUserException {
+			throws InvalidDataException {
 		
 		command.setCreationDate(new Date());
 		return dao.save(command);
 	}
 
-	public UserCommand getCommand(Long id) throws InvalidUserException {
+	public UserCommand getCommand(Long id) throws InvalidDataException {
 		
 		return dao.findOne(id);
 	}
 
 	public UserCommand getLastUnProcessCommand(String macAddress)
-			throws InvalidUserException {
+			throws InvalidDataException {
 		
 		UserCommand command = new UserCommand();
 		List<UserCommand> commands = dao.getUnProcessCommand(macAddress); 
@@ -43,13 +43,13 @@ public class UserCommandServiceImpl implements UserCommandService {
 	}
 
 	public List<UserCommand> getAll(String macAddress)
-			throws InvalidUserException {
+			throws InvalidDataException {
 		
 		return dao.getAllByMacAddress(macAddress);
 	}
 
 	@Override
-	public List<UserCommand> findByIds(String ids) throws InvalidUserException {
+	public List<UserCommand> findByIds(String ids) throws InvalidDataException {
 		
 		List<Long> newIds = new ArrayList<Long>();
 				

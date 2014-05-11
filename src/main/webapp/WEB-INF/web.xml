@@ -2,6 +2,7 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   <display-name>Sample App</display-name>
   <distributable/>
+  
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>
@@ -9,12 +10,15 @@
             classpath:/applicationContext-dao.xml
             classpath:/applicationContext-si-cxf.xml
             classpath:/applicationContext-task.xml
+            classpath:/applicationContext-security.xml
             WEB-INF/cxf-servlet.xml
         </param-value>
   </context-param>
+  
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
+  
   <servlet>
     <description>Apache CXF Endpoint</description>
     <display-name>cxf</display-name>
@@ -26,6 +30,7 @@
     <servlet-name>cxf</servlet-name>
     <url-pattern>/services/*</url-pattern>
   </servlet-mapping>
+  
   <servlet>
     <servlet-name>sample</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -35,6 +40,16 @@
     <servlet-name>sample</servlet-name>
     <url-pattern>/main/*</url-pattern>
   </servlet-mapping>
+  
+  <filter>
+  	<filter-name>springSecurityFilterChain</filter-name>
+  	<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <url-pattern>/main/*</url-pattern>
+  </filter-mapping>
+  
   <welcome-file-list>
     <welcome-file>/index</welcome-file>
   </welcome-file-list>

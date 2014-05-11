@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.luckyryan.sample.dao.HostStatusInfoDao;
 import com.luckyryan.sample.dao.model.HostStatusInfo;
-import com.luckyryan.sample.exception.InvalidUserException;
+import com.luckyryan.sample.exception.InvalidDataException;
 import com.socket.server.util.HostStatus;
 import com.socket.server.util.ProcessStatus;
 import com.socket.server.util.StringUtil;
@@ -23,10 +23,10 @@ public class HostStatusInfoServiceImpl implements HostStatusInfoService {
 	private HostStatusInfoDao dao;
 	
 	public HostStatusInfo saveInfo(HostStatusInfo pushedHost)
-			throws InvalidUserException {
+			throws InvalidDataException {
 		
 		if(pushedHost == null) {
-            throw new InvalidUserException("Sorry Dave");
+            throw new InvalidDataException("Sorry Dave");
         }
 		
 		HostStatusInfo updateHost = dao.getHostByMacAddress(pushedHost.getMacAddress());
@@ -119,7 +119,7 @@ public class HostStatusInfoServiceImpl implements HostStatusInfoService {
 			} else {
 				// 2.2 pushed by browser
 				// TODO This is not happened yet
-				throw new InvalidUserException("Sorry Dave");
+				throw new InvalidDataException("Sorry Dave");
 			}
 		}
 		
@@ -173,32 +173,32 @@ public class HostStatusInfoServiceImpl implements HostStatusInfoService {
 //        return dao.save(newHost);
 	}
 
-	public HostStatusInfo getInfo(Long id) throws InvalidUserException {
+	public HostStatusInfo getInfo(Long id) throws InvalidDataException {
 		if(id == null) {
-            throw new InvalidUserException("Sorry Dave");
+            throw new InvalidDataException("Sorry Dave");
         }
 		
 		return dao.findOne(id);
 	}
 
-	public HostStatusInfo getHostByMacAddress(String macAddress) throws InvalidUserException {
+	public HostStatusInfo getHostByMacAddress(String macAddress) throws InvalidDataException {
 		
 		return dao.getHostByMacAddress(macAddress);
 	}
 
-	public List<HostStatusInfo> getAll(Long userId) throws InvalidUserException {
+	public List<HostStatusInfo> getAll(Long userId) throws InvalidDataException {
 		
 		return dao.getAll();
 	}
 	
 	@Transactional//(readOnly = false, propagation = Propagation.REQUIRES_NEW)  
-	public int updateDisconnectedHostStatus(String newStatus)  throws InvalidUserException {
+	public int updateDisconnectedHostStatus(String newStatus)  throws InvalidDataException {
 		
 		return dao.updateDisconnectedHostStatus(newStatus);
 	}
 
 	@Override
-	public String deleteHostInfo(Long hostId) throws InvalidUserException {
+	public String deleteHostInfo(Long hostId) throws InvalidDataException {
 		try {
 			dao.delete(hostId);
 		} catch (Exception e) {
