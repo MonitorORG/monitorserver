@@ -14,8 +14,8 @@
         	login-page="/main/login.html"  
 			login-processing-url="/login" 
 			default-target-url="/main/index"  
-            authentication-failure-url="/main/login.html?error=true" />  
-    	<logout logout-success-url="/main/login.html" /> 
+            authentication-failure-url="/main/denied" />  
+    	<logout logout-success-url="/main/logout" /> 
 
     </http>  
   

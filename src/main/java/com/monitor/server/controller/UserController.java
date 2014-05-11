@@ -35,8 +35,18 @@ public class UserController {
 //    }
 	 
 	 @RequestMapping(value = "/login.html", method = RequestMethod.GET)
-     public ModelAndView commands() {
+     public ModelAndView loginPage() {
          return new ModelAndView("login");
+     }
+	 
+	 @RequestMapping(value = "/denied", method = RequestMethod.GET)
+     public ModelAndView deniedPage() {
+         return new ModelAndView("denied");
+     }
+	 
+	 @RequestMapping(value = "/logout", method = RequestMethod.GET)
+     public ModelAndView logoutPage() {
+         return new ModelAndView("logout");
      }
 	 
 	
