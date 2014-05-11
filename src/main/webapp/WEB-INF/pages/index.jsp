@@ -355,7 +355,7 @@
 	</div>
 	
 	<div style="text-align:right;margin-right:10px;">
-		<a href="agent-download" target="blank"><button id="downloadAgentBtn">Download Agent</button></a>
+		<a href="logout"><button id="logoutBtn">Logout</button></a>&nbsp;<a href="agent-download" target="blank"><button id="downloadAgentBtn">Download Agent</button></a>
 	</div>  
 	
 	<table id="hostCommandsTable"></table>
