@@ -50,20 +50,20 @@ public class UserController {
      }
 	 
 	
-	@RequestMapping(value = "/login", method = RequestMethod.POST)  
-    protected String handle(UserEntity user, BindingResult result, Model model, HttpServletRequest request) {  
-        String flag = userService.userLogin(user);  
-        if ("success".equals(flag)) { 
-        	request.getSession().setAttribute("username", user.getUsername());
-        	request.getSession().setAttribute("userrole", user.getRole());
-        	
-//            Map<String, String> map = new HashMap<String, String>();  
-//            map.put("name", user.getName());  
-//            map.put("password", user.getPassword());  
-//            return new ModelAndView("success", map);  
-            return "index";  
-        }  
-        return "login.html";  
-    }  
+//	@RequestMapping(value = "/login", method = RequestMethod.POST)  
+//    protected String handle(UserEntity user, BindingResult result, Model model, HttpServletRequest request) {  
+//        String flag = userService.userLogin(user);  
+//        if ("success".equals(flag)) { 
+//        	request.getSession().setAttribute("username", user.getUsername());
+//        	request.getSession().setAttribute("userrole", user.getRole());
+//        	
+////            Map<String, String> map = new HashMap<String, String>();  
+////            map.put("name", user.getName());  
+////            map.put("password", user.getPassword());  
+////            return new ModelAndView("success", map);  
+//            return "index";  
+//        }  
+//        return "login.html";  
+//    }  
 
 }

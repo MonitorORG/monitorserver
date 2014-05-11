@@ -14,6 +14,6 @@
         </c:if>
      
         <p class="message">Access denied!</p>
-        <a href="/main/login.html">Go back to login page</a>
+        <a href="${pageContext.request.contextPath}/main/login.html">Go back to login page</a>
     </body>
 </html>

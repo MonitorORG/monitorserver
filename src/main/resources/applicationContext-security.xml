@@ -7,15 +7,17 @@
     <http auto-config="true" use-expressions="false">  
 		<intercept-url pattern="/main/index" access="ROLE_ADMIN,ROLE_USER" />  
         <intercept-url pattern="/main/command" access="ROLE_ADMIN,ROLE_USER" />  
-        <intercept-url pattern="/main/admin" access="ROLE_ADMIN" />  
+        <intercept-url pattern="/main/admin" access="ROLE_ADMIN" />
+        
         <anonymous username="guest" granted-authority="ROLE_GUEST" />  
         
         <form-login 
         	login-page="/main/login.html"  
-			login-processing-url="/login" 
+			login-processing-url="/main/j_spring_security_check" 
 			default-target-url="/main/index"  
             authentication-failure-url="/main/denied" />  
     	<logout logout-success-url="/main/logout" /> 
+  
 
     </http>  
   

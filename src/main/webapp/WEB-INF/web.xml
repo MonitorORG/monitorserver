@@ -6,18 +6,38 @@
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>
+			WEB-INF/sample-servlet.xml
+			classpath:/applicationContext-security.xml
             classpath:/applicationContext.xml
             classpath:/applicationContext-dao.xml
-            classpath:/applicationContext-si-cxf.xml
             classpath:/applicationContext-task.xml
-            classpath:/applicationContext-security.xml
             WEB-INF/cxf-servlet.xml
+            classpath:/applicationContext-si-cxf.xml
         </param-value>
   </context-param>
   
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
+  
+  <filter>
+  	<filter-name>springSecurityFilterChain</filter-name>
+  	<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <url-pattern>/main/*</url-pattern>
+  </filter-mapping>
+  
+  <servlet>
+    <servlet-name>sample</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>sample</servlet-name>
+    <url-pattern>/main/*</url-pattern>
+  </servlet-mapping>
   
   <servlet>
     <description>Apache CXF Endpoint</description>
@@ -30,25 +50,6 @@
     <servlet-name>cxf</servlet-name>
     <url-pattern>/services/*</url-pattern>
   </servlet-mapping>
-  
-  <servlet>
-    <servlet-name>sample</servlet-name>
-    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>sample</servlet-name>
-    <url-pattern>/main/*</url-pattern>
-  </servlet-mapping>
-  
-  <filter>
-  	<filter-name>springSecurityFilterChain</filter-name>
-  	<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>springSecurityFilterChain</filter-name>
-    <url-pattern>/main/*</url-pattern>
-  </filter-mapping>
   
   <welcome-file-list>
     <welcome-file>/index</welcome-file>

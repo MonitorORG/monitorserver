@@ -34,20 +34,12 @@
 </head>
 <body>
 	<div>  
-       <form action="/monitorserver/main/login" id="loginform" method="post">  
-            <table align="center" style="padding: 100px">  
-                <tr>  
-                    <td>姓名：<input type="text" name="username" id="username" /> *必需 </td>  
-                    <td><form:errors path="*"/></td>  
-                </tr>  
-                <tr>  
-                    <td>密码：<input type="password" name="password" id="password"> *必需 </td>  
-                </tr>  
-                <tr>  
-                    <td><input type="submit"></td>  
-                </tr>  
-            </table>  
-        </form>  
+      	<form action="${pageContext.request.contextPath}/main/j_spring_security_check" method="post">
+	  		 用户： <input type="text" name="j_username" value="${SPRING_SECURITY_LAST_USERNAME}"/><br />
+	      	 密码： <input type="password" name="j_password"/><br />
+	        <input type="checkbox" name="_spring_security_remember_me" />两周之内不必登陆<br />
+	        <input type="submit" value="登陆"/><input type="reset" value="重置"/>
+  		</form> 
     </div>  
 	
 </body>
