@@ -25,35 +25,44 @@
     </script>
 </head>
 <body>
+
 <div>
-  		 <form action="${pageContext.request.contextPath}/main/createUser" method="post">
-            <table align="center" style="padding: 100px">  
-                <tr>  
-                    <td>用户名： <input id="username" type="text" name="username" value=""/> </td>  
-                    <td><form:errors path="*"/></td>  
-                </tr>  
-                <tr>  
-                    <td>密码： <input id="password" type="password" name="password" value=""/> </td>  
-                </tr>
-                <tr>  
-                    <td>姓名： <input id="firstname" type="text" name="firstname" value=""/> </td>  
-                    <td><form:errors path="*"/></td>  
-                </tr> 
-                <tr>  
-                    <td>电话： <input id="phonenumber" type="text" name="phonenumber" value=""/> </td>  
-                    <td><form:errors path="*"/></td>  
-                </tr>  
-                <tr>  
-                    <td>公司名称： <input id="companyname" type="text" name="companyname" value=""/> </td>  
-                    <td><form:errors path="*"/></td>  
-                </tr>    
-                <tr>  
-                    <td><input type="submit" value="注册"/><input type="reset" value="重置"/></td>  
-                </tr>  
-            </table>  
-        </form>  
-    </div>  
-   
+	<form:form method="Post" action="${pageContext.request.contextPath}/main/createUser" commandName="user" modelAttribute="user">
+		<table align="center" style="padding: 100px">
+			<tr>
+				<td>用户名: </td>
+			</tr>
+		<tr>
+			<td><form:input path="username" /> <FONT color="red"><form:errors path="username" /></FONT></td>
+		</tr>
+		
+		<tr>
+			<td>密码: </td>
+		</tr>
+		<tr>
+			<td><form:password path="password" /> <FONT color="red"><form:errors path="password" /></FONT></td>
+		</tr>
+		
+		<tr>
+			<td>确认密码: </td>
+		</tr>
+		<tr>
+			<td><form:password path="confirmPassword" /> <FONT color="red"><form:errors path="confirmPassword" /></FONT></td>
+		</tr>
+		
+		<tr>
+			<td>邮箱: </td>
+		</tr>
+		<tr>
+			<td><form:input path="email" /> <FONT color="red"><form:errors path="email" /></FONT></td>
+		</tr>
+		
+		<tr>
+		<td><input type="submit" value="提交" /></td>
+		</tr>
+		</table>
+	</form:form>
+</div>  
 	
 </body>
 </html>

@@ -22,6 +22,7 @@ public class UserEntity {
     private String email;
     private String password;
     private String username;
+    private String confirmPassword;
     
     private boolean enable;
     private String role;
@@ -117,6 +118,14 @@ public class UserEntity {
 
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
+	}
+
+	public String getConfirmPassword() {
+		return confirmPassword;
+	}
+
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
 	}
 
 }
