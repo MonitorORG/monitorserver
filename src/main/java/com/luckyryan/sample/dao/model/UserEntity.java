@@ -1,5 +1,7 @@
 package com.luckyryan.sample.dao.model;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -24,6 +26,9 @@ public class UserEntity {
     private boolean enable;
     private String role;
     private String phone;
+	
+	private Date createDate;
+	private Date updateDate;
 
     
     public String getPassword() {
@@ -96,6 +101,22 @@ public class UserEntity {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 
 }

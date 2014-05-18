@@ -1,10 +1,13 @@
 package com.luckyryan.sample.service;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.luckyryan.sample.dao.UserDao;
 import com.luckyryan.sample.dao.model.UserEntity;
+import com.luckyryan.sample.exception.InvalidDataException;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
@@ -21,6 +24,14 @@ public class UserServiceImpl implements UserService {
         } else {  
             return "false";  
         }  
+	}
+	
+	public UserEntity saveUser(UserEntity user)
+			throws InvalidDataException {
+		
+		user.setCreateDate(new Date());
+		user.setUpdateDate(new Date());
+		return userDao.save(user);
 	}
 
 	
