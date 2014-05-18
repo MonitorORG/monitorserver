@@ -34,6 +34,9 @@ public class HostStatusInfo {
 	@Transient
 	private Boolean isAgentCommited;	// null is default
 	
+	private boolean enable;
+	private Long userId;
+	
 	@OneToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name="hostId")
     private HostStatic host;
@@ -122,5 +125,17 @@ public class HostStatusInfo {
 	}
 	public void setIsAgentCommited(Boolean isAgentCommited) {
 		this.isAgentCommited = isAgentCommited;
+	}
+	public Long getUserId() {
+		return userId;
+	}
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+	public boolean isEnable() {
+		return enable;
+	}
+	public void setEnable(boolean enable) {
+		this.enable = enable;
 	}
 }

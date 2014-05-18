@@ -206,4 +206,15 @@ public class HostStatusInfoServiceImpl implements HostStatusInfoService {
 		}
 		return "Success";
 	}
+	
+	public List<HostStatusInfo> getNewHostList() throws InvalidDataException {
+		
+		return dao.getNewHostList();
+	}
+
+	@Override
+	public List<HostStatusInfo> getAssignedHostList() throws InvalidDataException {
+		
+		return dao.getAssignedHostList();
+	}
 }

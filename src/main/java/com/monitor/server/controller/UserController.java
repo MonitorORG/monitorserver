@@ -51,6 +51,11 @@ public class UserController {
          return new ModelAndView("admin");
      }
 	 
+	 @RequestMapping(value = "/toUserManagePage", method = RequestMethod.GET)
+     public ModelAndView toUserManagePage(HttpServletRequest request) {
+         return new ModelAndView("admin");
+     }
+	 
 	 @RequestMapping(value = "/toRegisterUsrPage", method = RequestMethod.GET)
      public ModelAndView registerUsr(HttpServletRequest request, Map<String, UserEntity> model) {
 		 
