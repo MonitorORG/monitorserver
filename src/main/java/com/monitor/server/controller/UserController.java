@@ -1,5 +1,6 @@
 package com.monitor.server.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,10 +17,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.luckyryan.sample.dao.model.HostStatusInfo;
 import com.luckyryan.sample.dao.model.UserEntity;
 import com.luckyryan.sample.service.UserServiceImpl;
+import com.socket.server.util.StringUtil;
 
 @Controller
 public class UserController {
@@ -53,7 +58,7 @@ public class UserController {
 	 
 	 @RequestMapping(value = "/toUserManagePage", method = RequestMethod.GET)
      public ModelAndView toUserManagePage(HttpServletRequest request) {
-         return new ModelAndView("admin");
+         return new ModelAndView("usermanage");
      }
 	 
 	 @RequestMapping(value = "/toRegisterUsrPage", method = RequestMethod.GET)
@@ -63,6 +68,14 @@ public class UserController {
 		 model.put("user", user);
          return new ModelAndView("register");
      }
+	 
+	 @RequestMapping(value = "/getAllUserList", method = RequestMethod.GET)
+	 public @ResponseBody List<UserEntity> getAllUserList() { 
+	        
+		 List<UserEntity> alluserlist = userService.findAll();   	
+		 return alluserlist;
+	 }
+	 
 	 
 	 @RequestMapping(value = "/createUser", method = RequestMethod.POST)
      public String createUser(@Valid @ModelAttribute("user") UserEntity user,
@@ -75,6 +88,8 @@ public class UserController {
 		 }
 		 
 		 try {
+			 user.setPassword(StringUtil.makeMD5(user.getPassword()));
+			 user.setConfirmPassword(StringUtil.makeMD5(user.getConfirmPassword()));
 			 UserEntity newUser = userService.saveUser(user);
 			 if (newUser.getId() != null) {
 				 return "admin";
@@ -99,5 +114,59 @@ public class UserController {
              }     
              return user;      
      }
+	 
+	 @RequestMapping(value = "/changeUserPwd", method = RequestMethod.GET)
+     public @ResponseBody String changeUserPwd(@RequestParam(value="userId") String userId, 
+    		 @RequestParam(value="newPwd") String newPwd) { 
+        
+		String result = "success";
+    	System.out.println("enableUser: userId: " + userId + " : newPwd: " + newPwd);
+    	
+    	if (!StringUtil.isEmpty(userId) && !StringUtil.isEmpty(newPwd)) {
+    		result = userService.changeUserPwd(Long.valueOf(userId), StringUtil.makeMD5(newPwd));
+    	} else {
+    		result = "Failed";
+    	}
+    	
+    	System.out.println("result: " + result);
+    	
+    	return result;
+     } 
+	 
+	 @RequestMapping(value = "/enableUser", method = RequestMethod.GET)
+     public @ResponseBody String enableUser(@RequestParam(value="userId") String userId, 
+    		 @RequestParam(value="isEnable") Boolean isEnable) { 
+        
+		String result = "success";
+    	System.out.println("enableUser: userId: " + userId + " : isEnable: " + isEnable);
+    	
+    	if (!StringUtil.isEmpty(userId) && isEnable != null) {
+    		result = userService.enableUser(Long.valueOf(userId), isEnable);
+    	} else {
+    		result = "Failed";
+    	}
+    	
+    	System.out.println("result: " + result);
+    	
+    	return result;
+     } 
+	 
+	 
+	 @RequestMapping(value = "/deleteUser", method = RequestMethod.GET)
+     public @ResponseBody String deleteUser(@RequestParam(value="userId") String userId) { 
+        
+		String result = "success";
+    	System.out.println("delete user: userId: " + userId);
+    	
+    	if (!StringUtil.isEmpty(userId)) {
+    		result = userService.deleteUser(Long.valueOf(userId));
+    	} else {
+    		result = "Failed";
+    	}
+    	
+    	System.out.println("result: " + result);
+    	
+    	return result;
+     } 
 	 
 }

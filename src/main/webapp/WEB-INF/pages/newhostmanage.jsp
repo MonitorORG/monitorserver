@@ -61,13 +61,38 @@
     		return "<button type='button' onclick='showAssignPanel(\"" + rowdata.id + "\", \"" + rowdata.macAddress + "\")'>"+$.i18n.prop('command.assign')+"</button>";
     	}
     	
-    	function enableColFormatter(cellvalue, options, rowdata) {    		
+    	function enableColFormatter(cellvalue, options, rowdata) {
+    		var delBtnHtml = "<button type='button' onclick='showDelConfirmPanel(\"" + rowdata.id + "\", \"" + rowdata.macAddress + "\")'>"+$.i18n.prop('command.delete')+"</button>";
     		if (rowdata.enable) {
-    			return "<button type='button' onclick='setHostEnable(\"" + rowdata.id + "\", \"" + false + "\")'>"+$.i18n.prop('command.disable')+"</button>";
+    			return "<button type='button' onclick='setHostEnable(\"" + rowdata.id + "\", \"" + false + "\")'>"+$.i18n.prop('command.disable')+"</button>" + delBtnHtml;
     		} else {
-    			return "<button type='button' onclick='setHostEnable(\"" + rowdata.id + "\", \"" + true + "\")'>"+$.i18n.prop('command.enable')+"</button>";
+    			return "<button type='button' onclick='setHostEnable(\"" + rowdata.id + "\", \"" + true + "\")'>"+$.i18n.prop('command.enable')+"</button>" + delBtnHtml;
     		}
     	}
+    	
+		function showDelConfirmPanel(id, macAddress) {
+			
+			$("#delHostId").val(id);
+			$("#deleteMessage").text("Are you sure to delete this host with Mac Address '" + macAddress + "'?");
+			popDelConfirmWindow();			
+		}
+		
+		function deleteHostInfo() {
+			var hostGrid = jQuery("#hostCommandsTable");
+			var hostId = $("#delHostId").val();
+    		$.ajax({
+	            type: "get",
+	            dataType: "json",
+	            url: "/monitorserver/main/deleteHost?hostId=" + hostId,
+	            complete :function(msg) {
+	            	hostGrid.trigger('reloadGrid');
+	            	closeDelConfirmPopWindowManual();
+	            },
+	            success: function(msg){
+	            	hostGrid.trigger('reloadGrid');
+	            	closeDelConfirmPopWindowManual();
+	            }});
+		}
     	
     	
     	function setHostEnable(hostId, isEnable) {
@@ -121,7 +146,7 @@
 		<a href="index"><button id="indexBtn">主页面</button></a>&nbsp;<a href="logout"><button id="logoutBtn">退出</button></a>&nbsp;
 	</div>
 
-	<!-- 删除确认窗口 -->
+	<!-- 分配用户窗口 -->
 	<div id="assignUserWindow" style="z-index:999;display:none;">
 		<div id="title" class="title">Assign User Window</div> 
 		<div class="content">		
@@ -137,6 +162,21 @@
 				<tr>
 					<td style="text-align:right"><button id='okConfigmBtn' type='button' onclick='assignUsertoHost()'>Save</button></td>
 					<td><button id='cancelAssignUserBtn' class="close" type='button'>Close</button></td>
+				</tr>
+			</table>
+		</div> 
+	</div> 
+	
+	<!-- 删除确认窗口 -->
+	<div id="delConfirmWindow" style="z-index:999;display:none;">
+		<div id="title" class="title">Delete Window</div> 
+		<div class="content">		
+			<input type='hidden' id='delHostId'/>
+			<span id="deleteMessage">&nbsp;</span>
+			<table>
+				<tr>
+					<td style="text-align:right"><button id='okConfigmBtn' type='button' onclick='deleteHostInfo()'>OK</button></td>
+					<td><button id='cancelConfirmBtn' class="close" type='button'>Cancel</button></td>
 				</tr>
 			</table>
 		</div> 

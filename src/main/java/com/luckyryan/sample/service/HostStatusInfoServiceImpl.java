@@ -209,7 +209,7 @@ public class HostStatusInfoServiceImpl implements HostStatusInfoService {
 		} catch (Exception e) {
 			return "Error: " + e.getMessage();
 		}
-		return "Success";
+		return "success";
 	}
 	
 	public List<HostStatusInfo> getAllHostList() throws InvalidDataException {

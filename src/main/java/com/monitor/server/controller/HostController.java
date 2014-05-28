@@ -79,7 +79,7 @@ public class HostController {
     		 @RequestParam(value="isEnable") Boolean isEnable) { 
         
 		String result = "success";
-    	System.out.println("assginUserToHost: hostId: " + hostId + " : isEnable: " + isEnable);
+    	System.out.println("enableHost: hostId: " + hostId + " : isEnable: " + isEnable);
     	
     	if (!StringUtil.isEmpty(hostId) && isEnable != null) {
     		result = hostService.enableHost(Long.valueOf(hostId), isEnable);
@@ -93,5 +93,21 @@ public class HostController {
      } 
 	 
 	 
+	 @RequestMapping(value = "/deleteHost", method = RequestMethod.GET)
+     public @ResponseBody String deleteHost(@RequestParam(value="hostId") String hostId) { 
+        
+		String result = "success";
+    	System.out.println("delete host: hostId: " + hostId);
+    	
+    	if (!StringUtil.isEmpty(hostId)) {
+    		result = hostService.deleteHostInfo(Long.valueOf(hostId));
+    	} else {
+    		result = "Failed";
+    	}
+    	
+    	System.out.println("result: " + result);
+    	
+    	return result;
+     } 
 	 
 }
