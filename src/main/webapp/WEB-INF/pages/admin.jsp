@@ -31,11 +31,9 @@
     </script>
 </head>
 <body>
-	Admin page
 	
 	<div style="text-align:right;margin-right:10px;">
-		<a href="toNewHostManagePage"><button id="newHostManageBtn">新增主机管理</button></a>&nbsp;
-		<a href="toAssignedHostManagePage"><button id="assigndHostManageBtn">已分配主机管理</button></a>&nbsp;
+		<a href="toNewHostManagePage"><button id="newHostManageBtn">主机管理</button></a>&nbsp;
 		<a href="toUserManagePage"><button id="userManageBtn">用户管理</button></a>&nbsp;
 		<a href="toRegisterUsrPage"><button id="registerBtn">普通用户注册</button></a>&nbsp;
 		<a href="index"><button id="indexBtn">主页面</button></a>&nbsp;<a href="logout"><button id="logoutBtn">退出</button></a>&nbsp;

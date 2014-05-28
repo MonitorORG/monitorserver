@@ -21,8 +21,8 @@ public interface HostStatusInfoDao extends CrudRepository<HostStatusInfo,Long> {
 	@Query("update HostStatusInfo h set h.status = :newStatus, h.processStatusResults = replace(h.processStatusResults, '*1', '*2') where (now()-h.updateDate) > '10 seconds'")
 	public int updateDisconnectedHostStatus(@Param("newStatus") String newStatus);
 	
-	@Query("select h from HostStatusInfo h where h.userId is null order by h.id desc")  
-	public List<HostStatusInfo> getNewHostList() throws InvalidDataException;
+	@Query("select h from HostStatusInfo h order by h.id desc")  
+	public List<HostStatusInfo> getAllHostList() throws InvalidDataException;
 	
 	@Query("select h from HostStatusInfo h where h.userId is not null order by h.id desc")  
 	public List<HostStatusInfo> getAssignedHostList() throws InvalidDataException;

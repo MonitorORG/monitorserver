@@ -1,4 +1,4 @@
-#delConfirmWindow, #processWindow, .window{ 
+#assignUserWindow, #delConfirmWindow, #processWindow, .window{ 
 	width:400px; 
 	background-color:#d0def0; 
 	position:absolute; 

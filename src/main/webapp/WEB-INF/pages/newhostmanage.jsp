@@ -5,10 +5,13 @@
 <html>
 <head>
     <title>new host manage Page</title>
+    <link href='<c:url value="/main/css/ui.jqgrid.css"/>' type="text/css" rel="stylesheet"></link>
 	<link href='<c:url value="/main/css/jquery.ui.theme.css"/>' type="text/css" rel="stylesheet"></link>
 	<link href='<c:url value="/main/css/main.css"/>' type="text/css" rel="stylesheet"></link>
 	
 	<script type="text/javascript" src='<c:url value="/main/js/jquery-1.11.0.min.js"></c:url>'></script>
+	<script type="text/javascript" src='<c:url value="/main/js/jquery.jqGrid.min.js"></c:url>'></script>
+	<script src="js/window.js" type="text/javascript"></script>
     
 	<script type="text/javascript" src='<c:url value="/main/js/i18n/grid.locale-en.js"></c:url>'></script>
 	<script type="text/javascript" src='<c:url value="/main/js/i18n/grid.locale-cn.js"></c:url>'></script>
@@ -19,14 +22,129 @@
     <script type="text/javascript">
     
     	$(document).ready(function(){
+    		// I18n initlize
+    		loadProperties();
     		
-    	});		
+    		document.title=$.i18n.prop('index.title'); 
+    		
+		
+			$("#unassignedHostTable").jqGrid({
+    			url:'/monitorserver/main/getAllHostList',
+    			datatype: "json",
+    			height: 450,
+    			colNames:['ID', $.i18n.prop('hostname'), $.i18n.prop('mac.address'), $.i18n.prop('userFullname'), $.i18n.prop('enable'), $.i18n.prop('assignUserBtn')], 
+				colModel:[ 
+					{name:'id',index:'id', width:40, sorttype:"int"}, 
+					{name:'hostname',index:'hostname', width:150}, 
+					{name:'macAddress',index:'macAddress', width:150},
+					{name:'userFullname',index:'userFullname', width:150},
+					{name:'enable',index:'enable', width:150, formatter: enableColFormatter},
+					{name:'assignUserBtn',index:'assignUserBtn', width:150, formatter: assignUserBtnColFormatter}
+				],
+    			rowNum:10,
+    			rowList:[10,20,30],
+    			pager: '#unassignedHostPager',
+    			sortname: 'id',
+    			viewrecords: true,
+    			sortorder: "desc",
+    			multiselect: false,
+				beforeSelectRow: function(rowId, e) {
+				},
+				onSelectRow: function(id){ 				
+				}
+    		});
+    		jQuery("#unassignedHostTable").jqGrid('navGrid','#unassignedHostPager',{add:false,edit:false,del:false});
+    	});	
+    	
+    	
+    	function assignUserBtnColFormatter(cellvalue, options, rowdata) {    		
+    		return "<button type='button' onclick='showAssignPanel(\"" + rowdata.id + "\", \"" + rowdata.macAddress + "\")'>"+$.i18n.prop('command.assign')+"</button>";
+    	}
+    	
+    	function enableColFormatter(cellvalue, options, rowdata) {    		
+    		if (rowdata.enable) {
+    			return "<button type='button' onclick='setHostEnable(\"" + rowdata.id + "\", \"" + false + "\")'>"+$.i18n.prop('command.disable')+"</button>";
+    		} else {
+    			return "<button type='button' onclick='setHostEnable(\"" + rowdata.id + "\", \"" + true + "\")'>"+$.i18n.prop('command.enable')+"</button>";
+    		}
+    	}
+    	
+    	
+    	function setHostEnable(hostId, isEnable) {
+    		$.ajax({
+	            type: "get",
+	            dataType: "json",
+	            url: "/monitorserver/main/enableHost?hostId="+hostId+"&isEnable="+isEnable,
+	            complete :function(result) {
+	            	jQuery("#unassignedHostTable").trigger('reloadGrid');
+	            	closeAssignUserPopWindowManual();
+	            },
+	            success: function(result){
+	            	jQuery("#unassignedHostTable").trigger('reloadGrid');
+	            	closeAssignUserPopWindowManual();
+	            }});
+    	}
+    	
+    	
+    	function showAssignPanel(id, macAddress) {
+    		$("#hostId").val(id);
+    		popAssignUserConfirmWindow();
+    	}
+    	
+    	
+    	function assignUsertoHost() {
+    		var hostId = $("#hostId").val();
+    		var userId = $("#userlist").val();
+    		
+    		$.ajax({
+	            type: "get",
+	            dataType: "json",
+	            url: "/monitorserver/main/assginUserToHost?hostId="+hostId+"&userId="+userId,
+	            complete :function(result) {
+	            	jQuery("#unassignedHostTable").trigger('reloadGrid');
+	            	closeAssignUserPopWindowManual();
+	            },
+	            success: function(result){
+	            	jQuery("#unassignedHostTable").trigger('reloadGrid');
+	            	closeAssignUserPopWindowManual();
+	            }});
+    	}
     
     </script>
 </head>
 <body>
+	
+	<div style="text-align:right;margin-right:10px;">
+		<a href="toNewHostManagePage"><button id="newHostManageBtn">主机管理</button></a>&nbsp;
+		<a href="toUserManagePage"><button id="userManageBtn">用户管理</button></a>&nbsp;
+		<a href="toRegisterUsrPage"><button id="registerBtn">普通用户注册</button></a>&nbsp;
+		<a href="index"><button id="indexBtn">主页面</button></a>&nbsp;<a href="logout"><button id="logoutBtn">退出</button></a>&nbsp;
+	</div>
 
-new host manage Page
+	<!-- 删除确认窗口 -->
+	<div id="assignUserWindow" style="z-index:999;display:none;">
+		<div id="title" class="title">Assign User Window</div> 
+		<div class="content">		
+			<input type='hidden' id='hostId'/>
+			
+			User List: <select id="userlist">
+			<c:forEach items="${alluserlist}" var="user">
+					<option value=<c:out value="${user.id}" />><c:out value="${user.username}" /></option>
+			</c:forEach>
+			</select>
+			
+			<table>
+				<tr>
+					<td style="text-align:right"><button id='okConfigmBtn' type='button' onclick='assignUsertoHost()'>Save</button></td>
+					<td><button id='cancelAssignUserBtn' class="close" type='button'>Close</button></td>
+				</tr>
+			</table>
+		</div> 
+	</div> 
 
+	
+	<table id="unassignedHostTable"></table>
+	<div id="unassignedHostPager"></div>
+	
 </body>
 </html>

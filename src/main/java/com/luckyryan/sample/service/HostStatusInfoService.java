@@ -11,9 +11,12 @@ public interface HostStatusInfoService {
 	public HostStatusInfo getHostByMacAddress(String macAddress) throws InvalidDataException;
 	
 	public List<HostStatusInfo> getAll(Long userId) throws InvalidDataException;
-	public List<HostStatusInfo> getNewHostList() throws InvalidDataException;
+	public List<HostStatusInfo> getAllHostList() throws InvalidDataException;
 	public List<HostStatusInfo> getAssignedHostList() throws InvalidDataException;
 	
 	public int updateDisconnectedHostStatus(String newStatus)  throws InvalidDataException;
 	public String deleteHostInfo(Long hostId)  throws InvalidDataException;
+	
+	public String assignUserToHost(Long userId, Long hostId) throws InvalidDataException;
+	public String enableHost(Long userId, Boolean isEnable) throws InvalidDataException;
 }

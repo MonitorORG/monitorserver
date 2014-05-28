@@ -19,6 +19,37 @@
     <script type="text/javascript">
     
     	$(document).ready(function(){
+
+    		
+    		// I18n initlize
+    		loadProperties();
+    		
+    		document.title=$.i18n.prop('index.title'); 
+    		
+		
+			$("#unassignedHostTable").jqGrid({
+    			url:'/monitorserver/main/getNewHostList',
+    			datatype: "json",
+    			height: 450,
+    			colNames:['ID', $.i18n.prop('hostname'), $.i18n.prop('mac.address')], 
+				colModel:[ 
+					{name:'id',index:'id', width:40, sorttype:"int"}, 
+					{name:'hostname',index:'hostname', width:150}, 
+					{name:'macAddress',index:'macAddress', width:150}
+				],
+    			rowNum:10,
+    			rowList:[10,20,30],
+    			pager: '#unassignedHostPager',
+    			sortname: 'id',
+    			viewrecords: true,
+    			sortorder: "desc",
+    			multiselect: false,
+				beforeSelectRow: function(rowId, e) {
+				},
+				onSelectRow: function(id){ 				
+				}
+    		});
+    		jQuery("#unassignedHostTable").jqGrid('navGrid','#unassignedHostPager',{add:false,edit:false,del:false});
     		
     	});		
     
@@ -27,6 +58,9 @@
 <body>
 
 Assigned host manage Page
+	
+	<table id="unassignedHostTable"></table>
+	<div id="unassignedHostPager"></div>
 
 </body>
 </html>

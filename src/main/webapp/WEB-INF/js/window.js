@@ -74,6 +74,23 @@ function popDelConfirmWindow(){
 } 
 
 
+//-----Assign user to host dialog----------
+function closeAssignUserPopWindowManual() {	
+	$("#assignUserWindow").hide("slow"); 	
+}
+
+function popAssignUserConfirmWindow(){ 
+	init(); 
+	var popY=windowHeight/2 - 200; 
+	var popX=windowWidth/2; 
+	$("#assignUserWindow").css("top",popY).css("left",popX).slideToggle("slow");  
+	
+	$("#cancelAssignUserBtn").click(function() {
+		closeAssignUserPopWindowManual();
+	});
+} 
+
+
 
 
 

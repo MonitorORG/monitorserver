@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.luckyryan.sample.dao.HostStatusInfoDao;
+import com.luckyryan.sample.dao.UserDao;
 import com.luckyryan.sample.dao.model.HostStatusInfo;
+import com.luckyryan.sample.dao.model.UserEntity;
 import com.luckyryan.sample.exception.InvalidDataException;
 import com.socket.server.util.HostStatus;
 import com.socket.server.util.ProcessStatus;
@@ -21,6 +23,9 @@ public class HostStatusInfoServiceImpl implements HostStatusInfoService {
 
 	@Autowired
 	private HostStatusInfoDao dao;
+	
+	@Autowired
+	private UserDao userDao;
 	
 	public HostStatusInfo saveInfo(HostStatusInfo pushedHost)
 			throws InvalidDataException {
@@ -207,9 +212,9 @@ public class HostStatusInfoServiceImpl implements HostStatusInfoService {
 		return "Success";
 	}
 	
-	public List<HostStatusInfo> getNewHostList() throws InvalidDataException {
+	public List<HostStatusInfo> getAllHostList() throws InvalidDataException {
 		
-		return dao.getNewHostList();
+		return dao.getAllHostList();
 	}
 
 	@Override
@@ -217,4 +222,54 @@ public class HostStatusInfoServiceImpl implements HostStatusInfoService {
 		
 		return dao.getAssignedHostList();
 	}
+	
+	
+	@Override
+	public String assignUserToHost(Long userId, Long hostId) throws InvalidDataException {
+		String result = "success";
+		try {
+			
+			UserEntity user = userDao.findOne(userId);
+			HostStatusInfo host = dao.findOne(hostId);
+			
+			if (user != null && host != null) {
+				host.setUserId(userId);
+				host.setUserFullname(user.getUsername());
+				dao.save(host);
+			} else {
+				result = "Failed";
+			}			
+			
+		} catch (Exception e) {
+			result = "Error: " + e.getMessage();
+		}
+		
+		System.out.println("SERVICE: result: " + result);
+		
+		return result;
+	}
+	
+	
+	@Override
+	public String enableHost(Long hostId, Boolean isEnable) throws InvalidDataException {
+		String result = "success";
+		try {
+			HostStatusInfo host = dao.findOne(hostId);
+			
+			if (host != null) {
+				host.setEnable(isEnable);
+				dao.save(host);
+			} else {
+				result = "Failed";
+			}			
+			
+		} catch (Exception e) {
+			result = "Error: " + e.getMessage();
+		}
+		
+		System.out.println("SERVICE: result: " + result);
+		
+		return result;
+	}
+	
 }

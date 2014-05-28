@@ -36,7 +36,14 @@ public class HostStatusInfo {
 	
 	private boolean enable;
 	private Long userId;
+	private String userFullname;
 	
+	public String getUserFullname() {
+		return userFullname;
+	}
+	public void setUserFullname(String userFullname) {
+		this.userFullname = userFullname;
+	}
 	@OneToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name="hostId")
     private HostStatic host;
