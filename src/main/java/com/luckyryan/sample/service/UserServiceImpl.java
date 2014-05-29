@@ -36,6 +36,11 @@ public class UserServiceImpl implements UserService {
 		return userDao.save(user);
 	}
 	
+	public UserEntity findUserByUsername(String username) throws InvalidDataException {
+		
+		return userDao.findByUsername(username);
+	}
+	
 	public List<UserEntity> findAll() throws InvalidDataException {
 		
 		return (List<UserEntity>)userDao.findAll();

@@ -27,8 +27,11 @@
     <script type="text/javascript">
 	
 		var isBatchInputCommand = false;
+		var loggedUserID;
     
     	$(document).ready(function(){
+    		
+    		loggedUserID = $("#loggedUserID").val();
     		
     		// I18n initlize
     		loadProperties();
@@ -46,7 +49,7 @@
         	$("#downloadAgentBtn").html($.i18n.prop('download.agent.label'));
 		
 			$("#hostCommandsTable").jqGrid({
-    			url:'/monitorserver/services/hostInfo/hostStatusInfoService/allHost/1',
+    			url:'/monitorserver/main/getAssignedHostList',
     			datatype: "json",
     			height: 450,
     			colNames:['Process List', 'Free Mem', 'ID', $.i18n.prop('hostname'), $.i18n.prop('mac.address'), $.i18n.prop('cpu.used'), $.i18n.prop('mem.used'), $.i18n.prop('host.status'), $.i18n.prop('process.status'), $.i18n.prop('process.manage'), $.i18n.prop('command.execute'), '<input class="gridparentcheckbox" onclick="clickGridParentCheckbox(this, event)" type="checkbox" />'], 
@@ -97,7 +100,7 @@
 	    			var hostMacAddress = $("#hostCommandsTable").getCell(row_id,"macAddress");
 	    			
 	    			jQuery("#"+subgrid_table_id).jqGrid({
-		    			url:"/monitorserver/services/command/userCommandService/allcommand/"+hostMacAddress,
+		    			url:"/monitorserver/main/getHostCommands?hostMacAddress="+hostMacAddress,
 		    			datatype: "json",
 		    			colNames:['ID', $.i18n.prop('mac.address'), $.i18n.prop('command.content'), $.i18n.prop('status'), $.i18n.prop('command.result')], 
 						colModel:[ 
@@ -177,7 +180,7 @@
     		$.ajax({
 	            type: "get",
 	            dataType: "json",
-	            url: "/monitorserver/services/hostInfo/hostStatusInfoService/delHost/" + hostId,
+	            url: "/monitorserver/main/deleteHost?hostId=" + hostId,
 	            complete :function(msg) {
 	            	hostGrid.trigger('reloadGrid');
 	            	closeDelConfirmPopWindowManual();
@@ -213,10 +216,8 @@
     		$.ajax({
 	            type: "get",
 	            dataType: "json",
-	            url: "/monitorserver/services/hostInfo/hostStatusInfoService/allHost/1",
-	            complete :function() {
-	            },
-	            success: function(hostInfoArray){
+	            url: "/monitorserver/main/getAssignedHostList",
+	            complete :function(hostInfoArray) {
 					$.each(hostInfoArray, function(i, hostInfo){   
 						
 						if (jQuery.inArray(hostInfo.id, ids)) {
@@ -226,7 +227,8 @@
 						}						
 						
 					});
-					
+	            },
+	            success: function(hostInfoArray){					
 	            }});
     	}
     	
@@ -238,15 +240,20 @@
 					var selRowId = $("#hostCommandsTable").jqGrid('getGridParam', 'selrow');					
 					$.ajax({
 						type: "POST",
-						url: "/monitorserver/services/command/userCommandService/create",
-						data: JSON.stringify({hostMacAddress:macAddress,commandStr:commandInputStr,status:"Created"}),
-						contentType: "application/json; charset=utf-8",
+						url: "/monitorserver/main/createCommand",
+						data: {hostMacAddress:macAddress,commandStr:commandInputStr},
 						dataType: "json",
-						success: function(data){
+						complete: function(data){
 							if (selRowId == $("#hostCommandsTable").jqGrid('getGridParam', 'selrow')) {
 								$("#hostCommandsTable").toggleSubGridRow(selRowId);
 								$("#hostCommandsTable").expandSubGridRow(selRowId);
 							}
+						},
+						success: function(data){
+							//if (selRowId == $("#hostCommandsTable").jqGrid('getGridParam', 'selrow')) {
+							//	$("#hostCommandsTable").toggleSubGridRow(selRowId);
+							//	$("#hostCommandsTable").expandSubGridRow(selRowId);
+							//}
 						},
 						failure: function(errMsg) {
 							
@@ -273,10 +280,8 @@
 				$.ajax({
 					type: "get",
 					dataType: "json",
-					url: "/monitorserver/services/command/userCommandService/allcommand/" + hostMacAddress,
-					complete :function() {
-					},
-					success: function(commandArray){
+					url: "/monitorserver/main/getHostCommands?hostMacAddress=" + hostMacAddress,
+					complete :function(commandArray) {
 						
 						$.each(commandArray, function(i, command){   
 
@@ -288,6 +293,8 @@
 							}
 							
 						});
+					},
+					success: function(commandArray){
 					}});
 			}
     	}
@@ -295,7 +302,9 @@
     </script>
 </head>
 <body>
-	
+
+	<input type="hidden" value="${userEntity.id}" id="loggedUserID" />
+		
 	<!-- 命令运行窗口 -->
 	<div class="window" id="center" style="z-index:999"> 
 		<div id="title" class="title">Run Command Window</div> 

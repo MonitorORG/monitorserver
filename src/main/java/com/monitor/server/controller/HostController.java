@@ -5,6 +5,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,11 +31,11 @@ public class HostController {
 	@Autowired
 	private UserServiceImpl userService;
 
-	@RequestMapping(value = "/toNewHostManagePage", method = RequestMethod.GET)
-    public ModelAndView toNewHostManagePage(HttpServletRequest request) {
+	@RequestMapping(value = "/toHostManagePage", method = RequestMethod.GET)
+    public ModelAndView toHostManagePage(HttpServletRequest request) {
 		
 		List<UserEntity> alluserlist = userService.findAll();
-		return new ModelAndView("newhostmanage", "alluserlist", alluserlist);
+		return new ModelAndView("hostmanage", "alluserlist", alluserlist);
     }
 	 
 	@RequestMapping(value = "/getAllHostList", method = RequestMethod.GET)
@@ -40,19 +44,13 @@ public class HostController {
 		List<HostStatusInfo> newhostlist = hostService.getAllHostList();   	
 		return newhostlist;
 	}
-	
-	@RequestMapping(value = "/toAssignedHostManagePage", method = RequestMethod.GET)
-    public ModelAndView toAssignedHostManagePage(HttpServletRequest request) {
-		
-		List<HostStatusInfo> assignedhostlist = hostService.getAssignedHostList();		
-		
-        return new ModelAndView("assignedhostmanage", "assignedhostlist", assignedhostlist);
-    }
 	 
-	@RequestMapping(value = "/getAssignedwHostList", method = RequestMethod.GET)
+	@RequestMapping(value = "/getAssignedHostList", method = RequestMethod.GET)
 	public @ResponseBody List<HostStatusInfo> getAssignedHostList() { 
 	        
-		List<HostStatusInfo> assignedhostlist = hostService.getAssignedHostList();   	
+		System.out.println("getAssignedHostList starting...");
+		UserEntity user = getLoggedUser();
+		List<HostStatusInfo> assignedhostlist = hostService.getAssignedHostList(user.getId());   	
 		return assignedhostlist;
 	}
 	 
@@ -110,4 +108,17 @@ public class HostController {
     	return result;
      } 
 	 
+	 
+	 public UserEntity getLoggedUser() {      
+         //取得登录用户      
+		 UserDetails user = null;
+         SecurityContext ctx = SecurityContextHolder.getContext();              
+         Authentication auth = ctx.getAuthentication();                    
+         if(auth.getPrincipal() instanceof UserDetails) {      
+         	user = (UserDetails)auth.getPrincipal();                        
+         }     
+         
+         UserEntity userEntity = userService.findUserByUsername(user.getUsername());    	
+         return userEntity;      
+ }
 }

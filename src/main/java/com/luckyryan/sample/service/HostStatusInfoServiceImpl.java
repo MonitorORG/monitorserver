@@ -218,9 +218,9 @@ public class HostStatusInfoServiceImpl implements HostStatusInfoService {
 	}
 
 	@Override
-	public List<HostStatusInfo> getAssignedHostList() throws InvalidDataException {
+	public List<HostStatusInfo> getAssignedHostList(Long userId) throws InvalidDataException {
 		
-		return dao.getAssignedHostList();
+		return dao.getAssignedHostList(userId);
 	}
 	
 	

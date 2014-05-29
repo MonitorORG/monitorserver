@@ -12,7 +12,7 @@ public interface HostStatusInfoService {
 	
 	public List<HostStatusInfo> getAll(Long userId) throws InvalidDataException;
 	public List<HostStatusInfo> getAllHostList() throws InvalidDataException;
-	public List<HostStatusInfo> getAssignedHostList() throws InvalidDataException;
+	public List<HostStatusInfo> getAssignedHostList(Long userId) throws InvalidDataException;
 	
 	public int updateDisconnectedHostStatus(String newStatus)  throws InvalidDataException;
 	public String deleteHostInfo(Long hostId)  throws InvalidDataException;
