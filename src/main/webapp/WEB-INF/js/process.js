@@ -10,7 +10,7 @@ function addProcessBtnClick() {
 	$("#processInput").val("")
 }
 
-function commitProcessCommand() {			
+function commitProcessCommand() {
 	var hostId = $("#processInputId").val();
 	var macAddress = $("#processInputMacAddress").val();
 	var processListStr = $("#processListStr").val();
@@ -24,12 +24,13 @@ function commitProcessCommand() {
 	
 		$.ajax({
 			type: "POST",
-			url: "/monitorserver/services/hostInfo/hostStatusInfoService/create",
-			data: JSON.stringify({macAddress:macAddress,processList:processListStr,processStatusResults:null,isAgentCommited:false}),
-			contentType: "application/json; charset=utf-8",
+			url: "/monitorserver/main/editHostProcessList",
+			data: {macAddress:macAddress,processList:processListStr},
 			dataType: "json",
+			complete :function(data) {
+				closeProcessPopWindowManual();
+			},
 			success: function(data){
-				closeProcessPopWindowManual();	
 			},
 			failure: function(errMsg) {
 				
@@ -50,17 +51,18 @@ function delProcessRow(delBtn) {
 		
 function showInputProcessPanel(id, macAddress) {
 	var selRowId = $("#hostCommandsTable").jqGrid('getGridParam', 'selrow');
-	if (id != selRowId) {			
-		$("#processInputId").val(id);
-		$("#processInputMacAddress").val(macAddress);
-		$("#processListStr").val("");
-		
-		$(".processtr").remove();				
-		jQuery("#hostCommandsTable").setSelection(id);					
-		var processlist = $("#hostCommandsTable").getCell(id, 'processList');
-		$("#processListTable").append(processlist.replace(/\#/g, "<tr class='processtr'><td>").replace(/\|/g, "</td><td><button onclick='delProcessRow(this)'>"+$.i18n.prop('del.btn')+"</button></td></tr>"));
-		$("#processListStr").val(processlist);
+	if (id != selRowId) {				
+		jQuery("#hostCommandsTable").setSelection(id);
 	}
+	
+	$(".processtr").remove();	
+	$("#processListStr").val("");		
+	$("#processInputId").val(id);
+	$("#processInputMacAddress").val(macAddress);
+	var processlist = $("#hostCommandsTable").getCell(id, 'processList');
+	$("#processListStr").val(processlist);
+	$("#processListTable").append(processlist.replace(/\#/g, "<tr class='processtr'><td>").replace(/\|/g, "</td><td><button onclick='delProcessRow(this)'>"+$.i18n.prop('del.btn')+"</button></td></tr>"));
+	
 	popProcessWindow();
 }
 		

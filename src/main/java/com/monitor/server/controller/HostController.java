@@ -1,5 +1,6 @@
 package com.monitor.server.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,8 +50,11 @@ public class HostController {
 	public @ResponseBody List<HostStatusInfo> getAssignedHostList() { 
 	        
 		System.out.println("getAssignedHostList starting...");
+		List<HostStatusInfo> assignedhostlist = new ArrayList<HostStatusInfo>();
 		UserEntity user = getLoggedUser();
-		List<HostStatusInfo> assignedhostlist = hostService.getAssignedHostList(user.getId());   	
+		if (user != null && user.getId() != null) {
+			assignedhostlist = hostService.getAssignedHostList(user.getId());   	
+		}
 		return assignedhostlist;
 	}
 	 
@@ -112,13 +116,40 @@ public class HostController {
 	 public UserEntity getLoggedUser() {      
          //取得登录用户      
 		 UserDetails user = null;
+		 UserEntity userEntity = null;
          SecurityContext ctx = SecurityContextHolder.getContext();              
          Authentication auth = ctx.getAuthentication();                    
          if(auth.getPrincipal() instanceof UserDetails) {      
          	user = (UserDetails)auth.getPrincipal();                        
-         }     
+         }  
          
-         UserEntity userEntity = userService.findUserByUsername(user.getUsername());    	
+         if (user != null && !StringUtil.isEmpty(user.getUsername())) {
+        	 userEntity = userService.findUserByUsername(user.getUsername());   
+         }
          return userEntity;      
- }
+	 }
+	 
+	 @RequestMapping(value = "/editHostProcessList", method = RequestMethod.POST)
+     public @ResponseBody String editHostProcessList(@RequestParam(value="macAddress") String macAddress, 
+    		 @RequestParam(value="processList") String processList) { 
+        
+		String result = "success";
+    	System.out.println("editHostProcessList: macAddress: " + macAddress + " : processList: " + processList);
+    	
+    	if (!StringUtil.isEmpty(macAddress) && !StringUtil.isEmpty(processList)) {
+    		HostStatusInfo host = new HostStatusInfo();
+    		host.setMacAddress(macAddress);
+    		host.setProcessList(processList);
+    		host.setProcessStatusResults(null);
+    		host.setIsAgentCommited(false);
+    		
+    		HostStatusInfo returns = hostService.saveInfo(host);
+    	} else {
+    		result = "Failed";
+    	}
+    	
+    	System.out.println("result: " + result);
+    	
+    	return result;
+     } 
 }

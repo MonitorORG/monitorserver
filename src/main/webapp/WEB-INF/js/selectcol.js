@@ -31,18 +31,21 @@ function runCommandForMultipleHost(commandInputStr) {
 		
 		$.ajax({
 			type: "POST",
-			url: "/monitorserver/services/command/userCommandService/create",
-			data: JSON.stringify({hostMacAddress:macAddress,commandStr:commandInputStr,status:"Created"}),
-			contentType: "application/json; charset=utf-8",
+			url: "/monitorserver/main/createCommand",
+			data: {hostMacAddress:macAddress,commandStr:commandInputStr},
 			dataType: "json",
-			success: function(data){
-				newCommandBatchIds += "," + data.id + ",";
+			complete: function(data){				
+				if (data.responseText != "Failed") {
+					var newCommandId = data.responseText;
+					newCommandBatchIds += "," + newCommandId + ",";
+					$("#commandInputTable").append("<tr class='executingInfo'><td>" + hostname + "</td><td>"+commandInputStr+"</td><td id='executeResult"+newCommandId+"'><span class='executing'>&nbsp;</span></td></tr>");
+				}
 				hostindex += 1;
-				$("#commandInputTable").append("<tr class='executingInfo'><td>" + hostname + "</td><td>"+commandInputStr+"</td><td id='executeResult"+data.id+"'><span class='executing'>&nbsp;</span></td></tr>");
-				
 				if (hostindex == hostcount) {
 					refreshExecutingCommands();
 				}
+			},
+			success: function(data){
 			},
 			failure: function(errMsg) {
 			}
@@ -58,24 +61,27 @@ function refreshExecutingCommands() {
 			$.ajax({
 		        type: "get",
 		        dataType: "json",
-		        url: "/monitorserver/services/command/userCommandService/findByIds/" + newCommandBatchIds,
-		        complete :function() {
+		        url: "/monitorserver/main/findCommandByIds?commandBatchIds=" + newCommandBatchIds,
+		        complete :function(data) {
+		        	if (data.responseText != "Failed") {
+						var executingCommandsArray = data.responseJSON;
+						$.each(executingCommandsArray, function(i, command){
+							if (command.status == 'Sucess' || command.status == 'Failed') {
+								$("#executeResult"+command.id).html("<span title='"+command.resultStr+"'>"+command.status+"</span>");
+								
+								hostindex -= 1;
+								newCommandBatchIds = newCommandBatchIds.replace(","+command.id+",", "");
+								if (newCommandBatchIds == "" || hostindex == 0) {
+									hostindex = 0;
+									newCommandBatchIds = "";
+									$('body').stopTime ('D');
+									//closePopWindowManual();
+								}
+							}
+						});
+		        	}
 		        },
 		        success: function(executingCommandsArray){
-					$.each(executingCommandsArray, function(i, command){
-						if (command.status == 'Sucess' || command.status == 'Failed') {
-							$("#executeResult"+command.id).html("<span title='"+command.resultStr+"'>"+command.status+"</span>");
-							
-							hostindex -= 1;
-							newCommandBatchIds = newCommandBatchIds.replace(","+command.id+",", "");
-							if (newCommandBatchIds == "" || hostindex == 0) {
-								hostindex = 0;
-								newCommandBatchIds = "";
-								$('body').stopTime ('D');
-								//closePopWindowManual();
-							}
-						}
-					});
 		    }});
 			
 		} else {

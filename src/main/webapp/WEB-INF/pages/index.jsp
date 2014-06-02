@@ -217,16 +217,18 @@
 	            type: "get",
 	            dataType: "json",
 	            url: "/monitorserver/main/getAssignedHostList",
-	            complete :function(hostInfoArray) {
-					$.each(hostInfoArray, function(i, hostInfo){   
-						
-						if (jQuery.inArray(hostInfo.id, ids)) {
-							hostGrid.setRowData(hostInfo.id, hostInfo);
-						} else {
-							hostGrid.addRowData(hostInfo.id, hostInfo, first);
-						}						
-						
-					});
+	            complete :function(data) {
+		            if (data.responseText != "Failed") {
+						var hostInfoArray = data.responseJSON;//JSON.parse(data.responseText);
+						$.each(hostInfoArray, function(i, hostInfo){  
+							if (jQuery.inArray(hostInfo.id, ids)) {
+								hostGrid.setRowData(hostInfo.id, hostInfo);
+							} else {
+								hostGrid.addRowData(hostInfo.id, hostInfo, first);
+							}						
+							
+						});
+		            }
 	            },
 	            success: function(hostInfoArray){					
 	            }});
@@ -281,18 +283,18 @@
 					type: "get",
 					dataType: "json",
 					url: "/monitorserver/main/getHostCommands?hostMacAddress=" + hostMacAddress,
-					complete :function(commandArray) {
-						
-						$.each(commandArray, function(i, command){   
-
-							if (jQuery.inArray(command.id, ids)) {
-								subGrid.setRowData(command.id, command);
-								$("#commandResultStr"+command.id).attr("title", command.resultStr);
-							} else {
-								subGrid.addRowData(command.id, command, first);
-							}
-							
-						});
+					complete :function(data) {						
+						if (data.responseText != "Failed") {
+							var commandArray = data.responseJSON;
+							$.each(commandArray, function(i, command){
+								if (jQuery.inArray(command.id, ids)) {
+									subGrid.setRowData(command.id, command);
+									$("#commandResultStr"+command.id).attr("title", command.resultStr);
+								} else {
+									subGrid.addRowData(command.id, command, first);
+								}								
+							});
+						}
 					},
 					success: function(commandArray){
 					}});

@@ -74,9 +74,8 @@ public class HostStatusInfoServiceImpl implements HostStatusInfoService {
 //				updateHost.setFreeMem(pushedHost.getFreeMem());
 //				updateHost.setCpuTotalUsed(pushedHost.getCpuTotalUsed());
 //				updateHost.setCpuCount(pushedHost.getCpuCount());
-				
-				updateHost.setProcessList(pushedHost.getProcessList());
 				boolean isProcessListChanged = !StringUtil.isEquals(pushedHost.getProcessList(), updateHost.getProcessList());
+				updateHost.setProcessList(pushedHost.getProcessList());
 				if (isProcessListChanged) {
 					// all process status will be reseted when process list is changed
 					StringBuffer initProcStaInfoBuf = new StringBuffer();
@@ -127,7 +126,6 @@ public class HostStatusInfoServiceImpl implements HostStatusInfoService {
 				throw new InvalidDataException("Sorry Dave");
 			}
 		}
-		
 		return dao.save(updateHost);
 		
 		

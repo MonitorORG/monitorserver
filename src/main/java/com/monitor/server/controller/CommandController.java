@@ -77,6 +77,8 @@ public class CommandController {
 	   		UserCommand newCommand = commandService.saveCommand(command);
 	   		if (newCommand.getId() == null) {
 	   			result = "Failed";
+	   		} else {
+	   			result = newCommand.getId().toString();
 	   		}
 	   	} else {
 	   		result = "Failed";
@@ -84,6 +86,19 @@ public class CommandController {
 	   	
 	   	return result;
     } 
+    
+    @RequestMapping(value = "/findCommandByIds", method = RequestMethod.GET)
+    public @ResponseBody List<UserCommand> findCommandByIds(@RequestParam(value="commandBatchIds") String commandBatchIds) { 
+        
+    	List<UserCommand> result = new ArrayList<UserCommand>();
+    	System.out.println("findCommandByIds: commandBatchIds: " + commandBatchIds);
+    	
+    	if (!StringUtil.isEmpty(commandBatchIds)) {
+    		result = commandService.findByIds(commandBatchIds);
+    	}
+    	
+    	return result;
+    }
 
 }
 	
