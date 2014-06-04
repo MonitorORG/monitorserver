@@ -26,6 +26,13 @@
 </head>
 <body>
 
+	<div style="text-align:right;margin-right:10px;">
+		<a href="toHostManagePage"><button id="hostManageBtn">主机管理</button></a>&nbsp;
+		<a href="toUserManagePage"><button id="userManageBtn">用户管理</button></a>&nbsp;
+		<a href="toRegisterUsrPage"><button id="registerBtn">普通用户注册</button></a>&nbsp;
+		<a href="index"><button id="indexBtn">主页面</button></a>&nbsp;<a href="logout"><button id="logoutBtn">退出</button></a>&nbsp;
+	</div>
+
 <div>
 	<form:form method="Post" action="${pageContext.request.contextPath}/main/createUser" commandName="user" modelAttribute="user">
 		<table align="center" style="padding: 100px">

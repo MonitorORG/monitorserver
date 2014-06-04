@@ -24,7 +24,7 @@ public interface HostStatusInfoDao extends CrudRepository<HostStatusInfo,Long> {
 	@Query("select h from HostStatusInfo h order by h.id desc")  
 	public List<HostStatusInfo> getAllHostList() throws InvalidDataException;
 	
-	@Query("select h from HostStatusInfo h where h.userId = :userId order by h.id desc")  
+	@Query("select h from HostStatusInfo h where h.userId = :userId and h.enable = true order by h.id desc")  
 	public List<HostStatusInfo> getAssignedHostList(@Param("userId") Long userId) throws InvalidDataException;
 	
 }
