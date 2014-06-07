@@ -230,7 +230,7 @@
         <dependency>
         	<groupId>commons-codec</groupId>
         	<artifactId>commons-codec</artifactId>
-        	<version>1.1</version>
+        	<version>1.4</version>
      	</dependency>
         
         <!-- Http Client, Only for java code test -->
@@ -344,8 +344,8 @@
 		<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.7</source>
+					<target>1.7</target>
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
