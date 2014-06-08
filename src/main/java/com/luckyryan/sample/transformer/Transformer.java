@@ -122,6 +122,7 @@ public class Transformer {
     	UserCommandDTO dto = new UserCommandDTO();
     	dto.setId(cmd.getId());
     	dto.setCommandStr(cmd.getCommandStr());
+    	dto.setSecureCommandStr(cmd.getSecureCommandStr());
     	dto.setCreationDate(cmd.getCreationDate());
     	dto.setEndDate(cmd.getEndDate());
     	dto.setHostMacAddress(cmd.getHostMacAddress());
@@ -138,6 +139,7 @@ public class Transformer {
     		UserCommandDTO dto = new UserCommandDTO();
         	dto.setId(cmd.getId());
         	dto.setCommandStr(cmd.getCommandStr());
+        	dto.setSecureCommandStr(cmd.getSecureCommandStr());
         	dto.setCreationDate(cmd.getCreationDate());
         	dto.setEndDate(cmd.getEndDate());
         	dto.setHostMacAddress(cmd.getHostMacAddress());

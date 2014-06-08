@@ -29,6 +29,10 @@ public class UserCommand {
 	private String hostMacAddress;
 	
 	private String commandStr;
+	
+	@Column(name="secureCommandStr",length=4000) 
+	private String secureCommandStr;
+	
 	private Date creationDate;
 	private Date endDate;
 	private String status;
@@ -120,5 +124,11 @@ public class UserCommand {
 	}
 	public void setHostMacAddress(String hostMacAddress) {
 		this.hostMacAddress = hostMacAddress;
+	}
+	public String getSecureCommandStr() {
+		return secureCommandStr;
+	}
+	public void setSecureCommandStr(String secureCommandStr) {
+		this.secureCommandStr = secureCommandStr;
 	}
 }

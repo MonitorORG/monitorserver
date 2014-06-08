@@ -341,7 +341,35 @@
         </resources>
         
         <plugins>
-		<plugin>
+        
+        
+	        <plugin>
+	             <groupId>org.apache.maven.plugins</groupId>
+	             <artifactId>maven-antrun-plugin</artifactId>
+	             <version>1.6</version>
+	             <executions>
+	              <execution>
+	                <id>compile</id>
+	                <phase>compile</phase>
+	                <configuration>
+	                  <target>
+	                    <echo message="********************copy profile propertie file *************************"/> 	                    	                                                                                                                                                                                   
+	                    <copy file="${basedir}/src/main/resources/keystore/secure.keystore"
+	                          tofile="${basedir}/target/classes/keystore/secure.keystore" overwrite="true"/>
+                        <copy file="${basedir}/src/main/resources/keystore/secure.cer"
+                         	  tofile="${basedir}/target/classes/keystore/secure.cer" overwrite="true"/>
+                        <copy file="${basedir}/src/main/resources/keystore/command.xml"
+                         	  tofile="${basedir}/target/classes/keystore/command.xml" overwrite="true"/> 	  
+	                  </target>
+	                </configuration>
+	                <goals>
+	                  <goal>run</goal>
+	                </goals>
+	              </execution>
+	            </executions>
+	        </plugin>
+	        
+		    <plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<source>1.7</source>

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.luckyryan.sample.dao.UserCommandDao;
 import com.luckyryan.sample.dao.model.UserCommand;
 import com.luckyryan.sample.exception.InvalidDataException;
+import com.socket.server.util.KeystoreUtil;
 import com.socket.server.util.StringUtil;
 
 @Service("userCommandService")
@@ -22,6 +23,8 @@ public class UserCommandServiceImpl implements UserCommandService {
 			throws InvalidDataException {
 		
 		command.setCreationDate(new Date());
+		command.setSecureCommandStr(KeystoreUtil.generateSecureCommandStr(command.getCommandStr()));
+		
 		return dao.save(command);
 	}
 
