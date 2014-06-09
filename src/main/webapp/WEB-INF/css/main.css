@@ -46,6 +46,26 @@
 	background: url(../image/wait.png) no-repeat left;
 }
 
+.adminheader {
+	background: url(../image/header_background_repetitive.png) repeat-x left;
+	height: 60px;
+	/*margin-bottom: 10px;*/
+	color: white;
+}
+
+.adminheader-a {
+	margin-left: 10px;
+	color: white;
+	TEXT-DECORATION: none
+}
+
+.adminheader_selected-a {
+	margin-left: 10px;
+	color: white;
+	font-weight: bold;
+	TEXT-DECORATION: none
+}
+
 .procStatus {
 	text-align:left;
 }

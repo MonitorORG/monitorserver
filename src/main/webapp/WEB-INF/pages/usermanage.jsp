@@ -139,12 +139,14 @@
     </script>
 </head>
 <body>
-	
-	<div style="text-align:right;margin-right:10px;">
-		<a href="toHostManagePage"><button id="hostManageBtn">主机管理</button></a>&nbsp;
-		<a href="toUserManagePage"><button id="userManageBtn">用户管理</button></a>&nbsp;
-		<a href="toRegisterUsrPage"><button id="registerBtn">普通用户注册</button></a>&nbsp;
-		<a href="index"><button id="indexBtn">主页面</button></a>&nbsp;<a href="logout"><button id="logoutBtn">退出</button></a>&nbsp;
+
+	<div class="adminheader">
+		<br />
+		<a id="toHostManageLink" class="adminheader-a" href="toHostManagePage">主机管理</a>&nbsp;
+		<a id="toUserLink" class="adminheader_selected-a" href="toUserManagePage">用户管理</a>&nbsp;
+		<a id="toRegisterLink" class="adminheader-a" href="toRegisterUsrPage">普通用户注册</a>&nbsp;
+		<a id="toIndexLink" class="adminheader-a" href="index">主页面</a>&nbsp;
+	    <a id="logout" class="adminheader-a" href="logout">退出</a>&nbsp;
 	</div>
 
 	<!-- 分配用户窗口 -->

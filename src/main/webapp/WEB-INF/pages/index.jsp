@@ -365,13 +365,15 @@
 		</div> 
 	</div>
 	
-	<div style="text-align:right;margin-right:10px;">
-		<a href="logout"><button id="logoutBtn">退出</button></a>&nbsp;<a href="agent-download" target="blank"><button id="downloadAgentBtn">Download Agent</button></a>&nbsp;
-		
+	
+	<div class="adminheader">
+		<br />
+		<a id="logout" class="adminheader-a" href="logout">退出</a>&nbsp;
+		<a id="agentdownload" class="adminheader-a" href="agent-download" target="blank"><span id="downloadAgentBtn">Download Agent</span></a>&nbsp;
 		<c:if test="${roleName.equals('ROLE_ADMIN')}">
-		    <a href="toAdminPage"><button id="adminBtn">进入管理页面</button></a>
+		    <a id="toAdminIndex" class="adminheader-a" href="toAdminPage">进入管理页面</a>
 		</c:if>
-	</div>  
+	</div>
 	
 	<table id="hostCommandsTable"></table>
 	<div id="hostCommandsPager"></div>
