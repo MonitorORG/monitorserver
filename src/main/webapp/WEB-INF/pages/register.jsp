@@ -19,22 +19,16 @@
     <script type="text/javascript">
     
     	$(document).ready(function(){
-    		
+
     	});		
     
     </script>
 </head>
 <body>
-
-	<div class="adminheader">
-		<br />
-		<a id="toHostManageLink" class="adminheader-a" href="toHostManagePage">主机管理</a>&nbsp;
-		<a id="toUserLink" class="adminheader-a" href="toUserManagePage">用户管理</a>&nbsp;
-		<a id="toRegisterLink" class="adminheader_selected-a" href="toRegisterUsrPage">普通用户注册</a>&nbsp;
-		<a id="toIndexLink" class="adminheader-a" href="index">主页面</a>&nbsp;
-	    <a id="logout" class="adminheader-a" href="logout">退出</a>&nbsp;
-	</div>
-
+	<jsp:include page="header.jsp" flush="true">	
+		<jsp:param name="currentpageIndex" value="toRegisterLink" />	
+	</jsp:include>
+	
 <div>
 	<form:form method="Post" action="${pageContext.request.contextPath}/main/createUser" commandName="user" modelAttribute="user">
 		<table align="center" style="padding: 100px">

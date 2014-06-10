@@ -33,6 +33,7 @@ public class UserServiceImpl implements UserService {
 		
 		user.setCreateDate(new Date());
 		user.setUpdateDate(new Date());
+		user.setRole("ROLE_USER");
 		return userDao.save(user);
 	}
 	

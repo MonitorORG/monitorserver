@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.luckyryan.sample.service.UserCommandServiceImpl;
 import com.socket.server.util.ConstantsUtil;
 
 @Controller 
@@ -23,16 +24,21 @@ public class AgentDownloadController {
 	private ConstantsUtil constantsUtil;
 	
 	 @RequestMapping("/agent-download")  
-      public void downloadFile(HttpServletRequest request, HttpServletResponse response){		   
+      public void downloadFile(HttpServletRequest request, HttpServletResponse response){
+		 String classpath = AgentDownloadController.class.getResource("/").toString().replace("file:/", "");
+		 String downloadFileName = "Agent.zip";
+		 String downloadFilePath = classpath + "/agent/Agent.zip";
+				 
+		 
 		 response.setCharacterEncoding("utf-8");  
          response.setContentType("multipart/form-data");
-         response.setHeader("Content-Disposition", "attachment;fileName=" + constantsUtil.getAgentDownloadFilename());  
+         response.setHeader("Content-Disposition", "attachment;fileName=" + downloadFileName);  
          
-         System.out.println("Reaed agentDownloadPath: " + constantsUtil.getAgentDownloadPath());
-         System.out.println("Filename: " + constantsUtil.getAgentDownloadFilename());
+         System.out.println("Reaed agentDownloadPath: " + downloadFilePath);
+         System.out.println("Filename: " + downloadFileName);
          
-         File downloadFile = new File(constantsUtil.getAgentDownloadPath());
-         String mimeType = request.getServletContext().getMimeType(constantsUtil.getAgentDownloadPath());
+         File downloadFile = new File(downloadFilePath);
+         String mimeType = request.getServletContext().getMimeType(downloadFilePath);
          if (mimeType == null) {
              mimeType = "application/zip";
          }

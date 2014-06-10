@@ -359,7 +359,9 @@
                         <copy file="${basedir}/src/main/resources/keystore/secure.cer"
                          	  tofile="${basedir}/target/classes/keystore/secure.cer" overwrite="true"/>
                         <copy file="${basedir}/src/main/resources/keystore/command.xml"
-                         	  tofile="${basedir}/target/classes/keystore/command.xml" overwrite="true"/> 	  
+                         	  tofile="${basedir}/target/classes/keystore/command.xml" overwrite="true"/>                          	  
+                        <copy file="${basedir}/src/main/resources/agent/Agent.zip"
+                         	  tofile="${basedir}/target/classes/agent/Agent.zip" overwrite="true"/> 	  	  
 	                  </target>
 	                </configuration>
 	                <goals>
